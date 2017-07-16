@@ -35,6 +35,9 @@ node_modules
 # Bower
 bower_components/
 
+# package-lock.json
+package-lock.json
+
 # IDE/Editor data
 .idea
 .vscode
