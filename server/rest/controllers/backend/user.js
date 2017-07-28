@@ -2,7 +2,7 @@
  * @file 管理后台用户接口逻辑层
  * @author littlewin(littlewin.wang@gmail.com)
  */
-import mongoose from 'mongoose'
+
 import md5 from 'md5'
 import adminConfig from '../../../config/admin'
 const { AdminUserModel } = require('../../models/index')

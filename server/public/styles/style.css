@@ -1,0 +1,66 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
+
+body {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 30px;
+  color: #777;
+}
+
+.login-container {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background: #0CF;
+}
+
+.sign-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 320px;
+  width: 100%;
+  background: #F9F9F9;
+  padding: 25px;
+}
+
+.sign-title {
+  color: #F96;
+  font-size: 30px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sign-list {
+  margin: 10px 0 0 0;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.sign-list input {
+  box-sizing: border-box;
+  width: 90%;
+  border: 1px solid #CCC;
+  background: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+}
+
+.sign-btn {
+  cursor: pointer;
+  width: 90%;
+  border: none;
+  background: #0CF;
+  color: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.sign-tip a {
+  text-decoration: none;
+}

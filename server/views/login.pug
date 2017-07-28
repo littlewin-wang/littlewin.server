@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  div.login-container
+    form.sign-form(method="post" action="/server/login")
+      div.sign-title littlewin的小黑屋
+      div.sign-list
+        input.item(type="text" name="name" placeholder="Your Username 用户名")
+      div.sign-list
+        input.item(type="password" name="password" placeholder="And Your Password 密码")
+      div.sign-list
+        button.sign-btn(type="submit") 登录
+      div.sign-list
+        div.sign-redirect
+          div.sign-tip 前台地址:&nbsp
+            a(href="#" target="_blank") littlewin.info
