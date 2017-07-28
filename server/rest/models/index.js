@@ -3,8 +3,8 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
-import AdminModel from './user/admin.model'
+import AdminUserModel from './user/admin.model'
 
 export {
-  AdminModel
+  AdminUserModel
 }

@@ -1,16 +1,16 @@
 /**
- * @file backend admin user schema
+ * @file 后台用户Schema
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const AdminSchema = new Schema({
-  name: { type: String, required: true },
-  nickname: { type: String, required: true },
+const AdminUserSchema = new Schema({
+  name: { type: String, required: true }, // 用户名
+  nickname: { type: String, required: true }, // 昵称
   password: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 })
 
-module.exports=mongoose.model('Admin', AdminSchema)
+module.exports = mongoose.model('AdminUser', AdminUserSchema)
