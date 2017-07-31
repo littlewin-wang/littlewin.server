@@ -1,9 +1,9 @@
-extends layout
+extends layout/layout
 
 block content
   div.login-container
     form.sign-form(method="post" action="/server/login")
-      div.sign-title littlewin的小黑屋
+      div.sign-title #{title}
       div.sign-list
         input.item(type="text" name="name" placeholder="Your Username 用户名")
       div.sign-list

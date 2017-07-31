@@ -13,4 +13,6 @@ router
   .post('/server/user/create_user', BackendUser.create_user)
   .get('/server/signout', BackendUser.signOut)
 
+  .get('/server/home', BackendMain.home)
+
 module.exports = router

@@ -8,6 +8,7 @@ body {
   color: #777;
 }
 
+/* login page */
 .login-container {
   position: relative;
   height: 100vh;
@@ -63,4 +64,110 @@ body {
 
 .sign-tip a {
   text-decoration: none;
+}
+
+/* header styles */
+.header {
+  padding: 1rem;
+}
+
+.header-nav {
+  position: relative;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background: #0CF;
+  color: white;
+}
+
+.header-nav span {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  background: #0BF;
+  color: white;
+  padding: 0 1.5rem;
+  font-size: 150%;
+  font-weight: 300;
+}
+
+.header-nav button {
+  align-self: stretch;
+  transition: all .4s ease-out;
+  padding: 0 1rem 0 1.5rem;
+  outline: 0;
+  border: 0;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background: #0BF;
+  color: white;
+  cursor: pointer;
+}
+
+.header-nav button.hidden {
+  transition: none;
+  border-right: 0.5rem solid #0BF;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.header-nav button::after {
+  content: attr(count);
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  background: #0AF;
+  color: #f2f2f2;
+  box-shadow: 0 0 1px 0 rgba(0,0,0,0.8);
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 14px;
+  margin-left: 1rem;
+  margin-right: calc(-1rem + -8px);
+}
+
+ul.links {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  flex: 1;
+  overflow: hidden;
+}
+
+ul.links li {
+  flex: none;
+}
+
+ul.links li a {
+  color: white;
+  cursor: pointer;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+ul.hidden-links {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin: 0;
+  list-style: none;
+  background: #0CF;
+}
+
+ul.hidden-links li a {
+  padding-left: 0.8rem;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+ul.hidden-links.hidden {
+  display: none;
+}
+
+ul.hidden-links li {
+  padding: 0.8rem;
 }
