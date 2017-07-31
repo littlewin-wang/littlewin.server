@@ -153,6 +153,7 @@ ul.hidden-links {
   right: 0;
   top: 100%;
   margin: 0;
+  padding: 0;
   list-style: none;
   background: #0CF;
 }
@@ -170,4 +171,26 @@ ul.hidden-links.hidden {
 
 ul.hidden-links li {
   padding: 0.8rem;
+}
+
+/* footer styles */
+.footer {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99;
+  text-align: center;
+}
+
+.footer-container {
+  width: 100%;
+  padding: 20px;
+  font-size: 14px;
+  color: #777;
+}
+
+.footer-container a {
+  color: #0CF;
+  text-decoration: none;
 }
