@@ -11,7 +11,7 @@ module.exports = {
   // 开发环境配置
   development: {
     mongo: {
-      uri: 'mongodb://localhost:27017/littlewin-test'
+      uri: 'mongodb://localhost:27017/littlewin-dev'
     },
     port: '8090'
   },
