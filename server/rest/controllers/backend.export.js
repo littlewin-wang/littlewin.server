@@ -5,8 +5,10 @@
 
 import BackendMain from './backend/index'
 import BackendUser from './backend/user'
+import BackendCategory from './backend/category'
 
 export {
   BackendMain,
-  BackendUser
+  BackendUser,
+  BackendCategory
 }

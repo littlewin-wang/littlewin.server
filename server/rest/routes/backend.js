@@ -3,7 +3,7 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
-import { BackendMain, BackendUser } from '../controllers/backend.export'
+import { BackendMain, BackendUser, BackendCategory } from '../controllers/backend.export'
 const router = require('koa-router')()
 
 router
@@ -14,5 +14,6 @@ router
   .get('/server/signout', BackendUser.signOut)
 
   .get('/server/home', BackendMain.home)
+  .post('/server/article/create_top_cate', BackendCategory.create_top_cate)
 
 module.exports = router

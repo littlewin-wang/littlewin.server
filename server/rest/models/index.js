@@ -4,7 +4,11 @@
  */
 
 import AdminUserModel from './user/admin.model'
+import TopCategoryModel from './category/topCategory.model'
+import CategoryModel from './category/category.model'
 
 export {
-  AdminUserModel
+  AdminUserModel,
+  TopCategoryModel,
+  CategoryModel
 }
