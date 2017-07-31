@@ -68,7 +68,7 @@ body {
 
 /* header styles */
 .header {
-  padding: 1rem;
+  padding: 20px;
 }
 
 .header-nav {
@@ -194,6 +194,48 @@ ul.hidden-links li {
 
 .footer-container a {
   color: #0CF;
+  text-decoration: none;
+}
+
+/*sidebar style*/
+.sidebar {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  bottom: 20px;
+  width: 200px;
+  padding: 0 20px;
+}
+
+.menu-container {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 40px 0;
+  background: #0CF;
+}
+
+.menu-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-list li {
+  text-align: center;
+}
+
+.menu-list li a.active {
+  color: white;
+  background: #0BF;
+}
+
+.menu-list li a{
+  display: inline-block;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  color: whitesmoke;
+  font-size: 1.1rem;
   text-decoration: none;
 }
 

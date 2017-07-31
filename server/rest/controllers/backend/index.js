@@ -3,6 +3,9 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
+import menu from '../config/menu'
+import mongoose from 'mongoose'
+import moment from 'moment'
 const { CategoryModel, TopCategoryModel } = require('../../models/index')
 
 const title = 'Littlewin Blog Admin'
@@ -41,6 +44,23 @@ class BackendMain {
     const skip = (Number(current) - 1) * limit
 
     const count = await mongoose.model(model).count()
+    const data = await mongoose.model(model).find().skip(skip).limit(limit).populate('cate_parent')
+    const top_cate = await TopCategoryModel.find()
+
+    return ctx.render(type, {
+      title,
+      data,
+      model,
+      user,
+      count,
+      type,
+      top_cate,
+      current,
+      index,
+      moment: require('moment'),
+      path: 'categorys/' + model,
+      menu: menu[type]
+    })
   }
 }
 
