@@ -3,7 +3,7 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
-const  title = 'littlewin博客后台'
+const  title = 'Littlewin Blog Admin'
 
 class BackendMain {
   // 登录页

@@ -146,6 +146,7 @@ ul.links li a {
   cursor: pointer;
   padding: 1rem;
   font-size: 0.9rem;
+  text-decoration: none;
 }
 
 ul.hidden-links {
@@ -163,6 +164,7 @@ ul.hidden-links li a {
   color: white;
   cursor: pointer;
   font-size: 0.9rem;
+  text-decoration: none;
 }
 
 ul.hidden-links.hidden {
@@ -193,4 +195,101 @@ ul.hidden-links li {
 .footer-container a {
   color: #0CF;
   text-decoration: none;
+}
+
+/*body container style*/
+.container {
+  position: relative;
+  margin: 80px auto 0 auto;
+  width: 6em;
+  height: 6em;
+}
+
+.content {
+  color: #0CF;
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+}
+
+.ring1, .ring2, .ring3 {
+  position: absolute;
+  width: 5em;
+  height: 5em;
+  border: 0.5em solid #FFF895;
+  border-radius: 50%;
+}
+
+.ring1 {z-index: 2;}
+
+.ring2 {
+  width: 3em;
+  height: 3em;
+  top: 1em;
+  left: 1em;
+  border: 0.5em solid #CC637C;
+  animation: move 1.5s ease-in-out infinite;
+}
+
+.ring3 {
+  width: 1em;
+  height: 1em;
+  top: 2em;
+  left: 2em;
+  border: 0.5em solid #AFEAFF;
+  animation: move2 1.5s ease-in-out infinite;
+}
+
+@keyframes move {
+  0% {
+    width: 3em;
+    height: 3em;
+    top: 1em;
+    left: 1em;
+    z-index: 3;
+  }
+  50% {
+    width: 7em;
+    height: 7em;
+    top: -1em;
+    left: -1em;
+  }
+  75% {
+    z-index: 1;
+  }
+  100% {
+    width: 3em;
+    height: 3em;
+    top: 1em;
+    left: 1em;
+    z-index: 3;
+  }
+}
+
+
+@keyframes move2 {
+  0% {
+    width: 1em;
+    height: 1em;
+    top: 2em;
+    left: 2em;
+    z-index: 4;
+  }
+  50% {
+    width: 9em;
+    height: 9em;
+    top: -2em;
+    left: -2em;
+  }
+  75% {
+    z-index: 0;
+  }
+  100% {
+    width: 1em;
+    height: 1em;
+    top: 2em;
+    left: 2em;
+    z-index: 4;
+  }
 }

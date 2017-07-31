@@ -3,7 +3,7 @@ header.header
     span #{title}
     ul.links
       li
-        a 首页
+        a(href="/server/home") 首页
       li
         a 分类管理
       li
@@ -11,8 +11,8 @@ header.header
       li
         a 用户管理
       li
-        a 登录用户
+        a #{user.name}
       li
-        a 注销
+        a(href="/server/signout") 注销
     button MENU
     ul.hidden-links.hidden

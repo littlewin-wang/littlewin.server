@@ -36,7 +36,8 @@ class BackendUser {
     nickname,
     password: md5(password)
   })
-  // ctx.redirect('/')
+
+  ctx.redirect('/')
   }
 
   // 后台用户登录
@@ -50,8 +51,8 @@ class BackendUser {
       })
     }
     if (name === adminConfig.name && md5(password) === adminConfig.password) {
-      // ctx.session.user = { name, password }
-      // ctx.redirect('/server/home')
+      ctx.session.user = { name, password }
+      ctx.redirect('/server/home')
     }
     const result = await AdminUserModel.findOne({
       name,
@@ -63,16 +64,15 @@ class BackendUser {
         error: { status:400 }
       })
     }
-    // ctx.session.user = result
-    // ctx.redirect('/server/home')
+    ctx.session.user = result
+    ctx.redirect('/server/home')
   }
 
   // 后台用户退出
   static async signOut (ctx) {
-    // ctx.session.user = null
-    // return ctx.render('login', { title: 'SInn管理平台'})
+    ctx.session.user = null
+    return ctx.render('login', { title: 'SInn管理平台'})
   }
-
 }
 
 export default BackendUser

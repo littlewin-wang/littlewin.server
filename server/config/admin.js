@@ -7,5 +7,5 @@ const md5 = require('md5')
 
 module.exports = {
 	name: 'littlewin',
-	password: md5('admin')
+	password: md5('123456')
 }
