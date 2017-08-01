@@ -1,2 +1,2 @@
-# littlewin-blog
-A blog system based on Vue.js + koa + mongoose.
+# littlewin.server
+A blog backend server based on koa + mongoose.
