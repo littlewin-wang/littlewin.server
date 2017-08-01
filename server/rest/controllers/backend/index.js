@@ -58,7 +58,7 @@ class BackendMain {
       current,
       index,
       moment: require('moment'),
-      path: 'categorys/' + model,
+      mixin: model,
       menu: menu[type]
     })
   }

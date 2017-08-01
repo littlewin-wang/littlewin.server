@@ -76,7 +76,7 @@ body {
   height: 60px;
   display: flex;
   align-items: center;
-  background: #0CF;
+  background: #027BE3;
   color: white;
 }
 
@@ -84,7 +84,7 @@ body {
   display: flex;
   align-self: stretch;
   align-items: center;
-  background: #0BF;
+  background: #027BE3;
   color: white;
   padding: 0 1.5rem;
   font-size: 150%;
@@ -119,8 +119,8 @@ body {
   height: 30px;
   align-items: center;
   justify-content: center;
-  background: #0AF;
-  color: #f2f2f2;
+  background: #027BE3;
+  color: #F2F2F2;
   box-shadow: 0 0 1px 0 rgba(0,0,0,0.8);
   border-radius: 50%;
   font-size: 14px;
@@ -156,7 +156,8 @@ ul.hidden-links {
   margin: 0;
   padding: 0;
   list-style: none;
-  background: #0CF;
+  background: #027BE3;
+  z-index: 99;
 }
 
 ul.hidden-links li a {
@@ -193,7 +194,7 @@ ul.hidden-links li {
 }
 
 .footer-container a {
-  color: #0CF;
+  color: #027BE3;
   text-decoration: none;
 }
 
@@ -211,7 +212,7 @@ ul.hidden-links li {
   box-sizing: border-box;
   height: 100%;
   padding: 40px 0;
-  background: #0CF;
+  background: #F0F6F6;
 }
 
 .menu-list {
@@ -225,8 +226,8 @@ ul.hidden-links li {
 }
 
 .menu-list li a.active {
-  color: white;
-  background: #0BF;
+  color: #2277da;
+  background: #D5E2EF;
 }
 
 .menu-list li a{
@@ -234,21 +235,21 @@ ul.hidden-links li {
   width: 100%;
   height: 60px;
   line-height: 60px;
-  color: whitesmoke;
-  font-size: 1.1rem;
+  color: black;
+  font-size: 1rem;
   text-decoration: none;
 }
 
 /*body container style*/
-.container {
+.home-container {
   position: relative;
   margin: 80px auto 0 auto;
   width: 6em;
   height: 6em;
 }
 
-.content {
-  color: #0CF;
+.home-content {
+  color: #027BE3;
   text-align: center;
   margin-top: 50px;
   font-size: 1.2rem;
@@ -334,4 +335,79 @@ ul.hidden-links li {
     left: 2em;
     z-index: 4;
   }
+}
+
+/*container style*/
+.container {
+  position: absolute;
+  top: 100px;
+  left: 240px;
+}
+
+.green {
+  background: #027BE3;
+  color: #fff;
+}
+
+.green:hover {
+  background: #4EACFD !important;
+}
+
+.btn {
+  width: 100px;
+  height: 35px;
+  line-height: 35px;
+  border-radius: 5px;
+  text-align: center;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+}
+
+.table {
+  margin: 10px 0;
+}
+
+table {
+  text-align: left;
+  line-height: 40px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid #027BE3;
+  margin: 20px auto;
+  width: 400px;
+  border-radius: .25rem;
+  font-size: 14px;
+}
+
+thead tr:first-child {
+  background: #027BE3;
+  color: #FFF;
+  border: none;
+}
+
+th:first-child,
+td:first-child {
+  padding: 0 15px 0 20px;
+}
+
+thead tr:last-child th {
+  border-bottom: 3px solid #DDD;
+}
+
+tbody tr:last-child td {
+  border: none;
+}
+
+tbody td {
+  border-bottom: 1px solid #DDD;
+}
+
+tbody td a {
+  display: inline-block;
+  margin: 0 5px;
+  cursor: pointer;
+  color: #027BE3;
+  text-decoration: none;
 }

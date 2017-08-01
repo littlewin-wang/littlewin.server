@@ -1,0 +1,8 @@
+extends layout/layout
+
+block content
+  include layout/header
+  include layout/sidebar
+  include mixins/category
+  +#{mixin}()
+  include layout/footer

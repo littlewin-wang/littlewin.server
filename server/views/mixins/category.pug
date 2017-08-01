@@ -1,0 +1,21 @@
+mixin TopCategory()
+  div.container.cate
+    div.top
+      button.btn.green(id="top-cate" onclick="showForm('#top-cate-form')") 添加分类
+    div.table
+      table.cate-table
+        thead.table-head
+          tr
+            th 序号
+            th 分类名称
+            th 更新时间
+            th 操作
+        tbody.table-body
+          each item, index in data
+            tr
+              td #{index + 1}
+              td #{item.top_cate_name}
+              td #{moment(item.createdAt).format('YYYY-MM-DD HH:mm')}
+              td
+                a(onclick="editTopcate(this)" cate_id=item._id val=item.top_cate_name) 编辑
+                a(href="/server/article/delete_cate/"+item._id+"?model="+model+"&type="+type) 删除
