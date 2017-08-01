@@ -32,7 +32,7 @@ class BackendMain {
 
     // 选择一级分类还是二级分类
     if (item) {
-      index = item
+      index = parseInt(item)
     }
 
     // 选择表格分页

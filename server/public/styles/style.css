@@ -73,7 +73,7 @@ body {
 
 .header-nav {
   position: relative;
-  height: 60px;
+  height: 48px;
   display: flex;
   align-items: center;
   background: #027BE3;
@@ -376,7 +376,7 @@ table {
   border-spacing: 0;
   border: 2px solid #027BE3;
   margin: 20px auto;
-  width: 400px;
+  width: 500px;
   border-radius: .25rem;
   font-size: 14px;
 }

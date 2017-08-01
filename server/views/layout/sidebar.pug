@@ -1,6 +1,6 @@
 div.sidebar
   div.menu-container
     ul.menu-list
-      each item in menu
+      each item, idx in menu
         li
-          a(href=item.route) #{item.label}
+          a(href=item.route class=(index === idx + 1) ? 'active' : '') #{item.label}
