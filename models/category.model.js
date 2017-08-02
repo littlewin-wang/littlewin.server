@@ -3,7 +3,7 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
-const mongoose = require('../database/mongodb').mongoose
+const mongoose = require('../db/mongodb').mongoose
 const autoIncrement = require('mongoose-auto-increment')
 const paginate = require('mongoose-paginate')
 const Schema = mongoose.Schema
