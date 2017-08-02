@@ -1,24 +1,33 @@
+require('app-module-path').addPath(__dirname + '/');
+
 const Koa = require('koa')
 const app = new Koa()
+
 const convert = require('koa-convert')
 const bodyparser = require('koa-bodyparser')()
 const logger = require('koa-logger')
 const session = require('koa-session')
 
+const mongodb = require('db/mongodb')
+const mongoosePaginate = require('mongoose-paginate')
+
+const config = require('config/env')[process.env.NODE_ENV||'development']
 const router  = require('./routes')
+
+// data server
+mongodb.connect()
+
+// global options
+mongoosePaginate.paginate.options = {
+  limit: config.APP.LIMIT
+}
 
 // cookies
 app.keys = ['littlewin']
-const CONFIG = {
-  key: 'littlewin',
-  maxAge: 604800000,
-  overwrite: true,
-  signed: true,
-}
 
 // middleware
 app.use(convert(logger()))
-   .use(convert(session(CONFIG, app)))
+   .use(convert(session(config.session, app)))
    .use(bodyparser)
 
 // logger
