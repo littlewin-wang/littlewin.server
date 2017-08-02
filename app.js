@@ -6,7 +6,6 @@ const app = new Koa()
 const convert = require('koa-convert')
 const bodyparser = require('koa-bodyparser')()
 const logger = require('koa-logger')
-const session = require('koa-session')
 
 const mongodb = require('db/mongodb')
 const mongoosePaginate = require('mongoose-paginate')
@@ -22,12 +21,8 @@ mongoosePaginate.paginate.options = {
   limit: config.APP.LIMIT
 }
 
-// cookies
-app.keys = ['littlewin']
-
 // middleware
 app.use(convert(logger()))
-   .use(convert(session(config.session, app)))
    .use(bodyparser)
 
 // logger

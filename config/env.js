@@ -10,7 +10,7 @@
  */
 
 let AUTH = {
-  data: { name: 'admin', password: '123456' },
+  default: { name: 'admin', password: '123456' },
   jwtTokenSecret: 'littlewin'
 }
 
