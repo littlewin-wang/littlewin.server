@@ -10,11 +10,16 @@ const middleware = require('middlewares')
 
 router
   .get('/', (ctx) => {
-    ctx.body = 'Hello World!'
+    ctx.body = {
+      title: "littlewin.server API",
+      version: "v1",
+      author: "littlewin.wang@gmail.com"
+    }
   })
   .post('/login', User.login)
   .post('/user', middleware.verifyToken, User.create)
 
   .post('/category', Category.create)
+  .get('/category', Category.list)
 
 module.exports = router

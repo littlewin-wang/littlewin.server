@@ -37,6 +37,18 @@ class Category {
         ctx.throw(401, 'create category error.')
       })
   }
+
+  static async list (ctx) {
+    const categories = await CategoryModel.find().populate('sub').exec()
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "list all categories.",
+      data: {
+        categories
+      }
+    }
+  }
 }
 
 module.exports = Category
