@@ -22,5 +22,6 @@ router
   .post('/category', Category.create)
   .get('/category', Category.list)
   .put('/category/:id', Category.modify)
+  .delete('/category/:id', Category.delete)
 
 module.exports = router
