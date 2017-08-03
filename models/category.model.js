@@ -19,8 +19,8 @@ const CategorySchema = new Schema({
   // 描述
   description: String,
 
-  // 子分类
-  sub: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  // 父分类
+  super: { type: Schema.Types.ObjectId, ref: 'Category' },
 
   // 创建时间
   createAt: { type: Date, default: Date.now },
@@ -41,8 +41,8 @@ CategorySchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
-CategorySchema.pre('findOneAndUpdate', (next) => {
-  this.findOneAndUpdate({}, { update_at: Date.now() })
+CategorySchema.pre('findOneAndUpdate', function(next) {
+  this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
 })
 

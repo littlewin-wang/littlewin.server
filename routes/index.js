@@ -21,5 +21,6 @@ router
 
   .post('/category', Category.create)
   .get('/category', Category.list)
+  .put('/category/:id', Category.modify)
 
 module.exports = router
