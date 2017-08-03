@@ -39,7 +39,7 @@ class Category {
   }
 
   static async list (ctx) {
-    const categories = await CategoryModel.find().populate('super').exec()
+    const categories = await CategoryModel.find().populate('super')
     ctx.status = 200
     ctx.body = {
       success: true,
@@ -54,8 +54,6 @@ class Category {
     const category = ctx.request.body
     const id = ctx.params.id
 
-    console.log(id)
-
     // name validate
     if (!category.name) {
       ctx.throw(401, 'category name expected.')
@@ -65,7 +63,6 @@ class Category {
     // if new category's name duplicated
     const isExist = await CategoryModel
       .findOne({name: category.name})
-      .exec()
 
     if (isExist) {
       ctx.status = 401,
@@ -81,15 +78,47 @@ class Category {
       if (['', '0', 'null', 'false'].includes(pid) || !pid || Object.is(pid, id)) {
         category.super = null
       }
-      await CategoryModel.findByIdAndUpdate(id, category, { new: true })
-      ctx.status = 200,
-      ctx.body = {
-        success: true,
-        message: "category update success.",
-        data: {
-          category
+
+      let cate = await CategoryModel.findByIdAndUpdate(id, category, { new: true })
+
+      if (!cate) {
+        ctx.throw(401, 'No category with the given ID')
+      } else {
+        ctx.status = 200,
+        ctx.body = {
+          success: true,
+          message: "category update success.",
+          data: {
+            category: cate
+          }
         }
+        // TODO sitemap && SEO
       }
+    }
+  }
+
+  static async delete (ctx) {
+    const id = ctx.params.id
+
+    // name validate
+    let isExist = await CategoryModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "category id not exist."
+      }
+      return
+    }
+
+    await CategoryModel.remove({_id: id})
+
+    ctx.status = 200,
+    ctx.body = {
+      success: true,
+      message: "category delete success."
     }
   }
 }

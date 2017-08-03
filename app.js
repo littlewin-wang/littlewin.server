@@ -11,6 +11,7 @@ const mongodb = require('db/mongodb')
 const mongoosePaginate = require('mongoose-paginate')
 
 const config = require('config/env')[process.env.NODE_ENV||'development']
+const middleware = require('middlewares')
 const router  = require('./routes')
 
 // data server
@@ -34,6 +35,7 @@ app.use(async (ctx, next) => {
 })
 
 // router
+app.use(middleware.errorHandler)
 app.use(router.routes(), router.allowedMethods())
 
 module.exports = app

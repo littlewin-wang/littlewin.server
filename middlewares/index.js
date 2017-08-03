@@ -4,7 +4,9 @@
  */
 
 const verifyToken = require('./verifyToken')
+const errorHandler= require('./errorHandler')
 
 module.exports = {
-  verifyToken
+  verifyToken,
+  errorHandler
 }
