@@ -28,5 +28,7 @@ router
 
   .post('/tag', Tag.create)
   .get('/tag', Tag.list)
+  .get('/tag/:id', Tag.get)
+  .delete('/tag/:id', Tag.delete)
 
 module.exports = router

@@ -54,7 +54,7 @@ class Tag {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "list all categories.",
+      message: "list all tags.",
       data: {
         tags: tags.docs,
         total: tags.total,
@@ -62,6 +62,56 @@ class Tag {
         page: tags.page,
         pages: tags.pages
       }
+    }
+  }
+
+  static async get(ctx) {
+    const id = ctx.params.id
+
+    // name validate
+    let isExist = await TagModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "tag id not exist."
+      }
+    } else {
+      ctx.status = 200,
+      ctx.body = {
+        success: true,
+        message: "get tag success.",
+        data: {
+          tag: isExist
+        }
+      }
+    }
+  }
+
+  static async delete (ctx) {
+    const id = ctx.params.id
+
+    // name validate
+    let isExist = await TagModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "tag id not exist."
+      }
+      return
+    }
+
+    await TagModel.remove({_id: id})
+
+    ctx.status = 200,
+    ctx.body = {
+      success: true,
+      message: "tag delete success."
     }
   }
 }
