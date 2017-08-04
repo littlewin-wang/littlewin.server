@@ -6,6 +6,7 @@
 const router = require('koa-router')()
 const User = require('controllers/user')
 const Category = require('controllers/category')
+const Tag = require('controllers/tag')
 const middleware = require('middlewares')
 
 router
@@ -24,5 +25,8 @@ router
   .get('/category/:id', Category.get)
   .put('/category/:id', Category.modify)
   .delete('/category/:id', Category.delete)
+
+  .post('/tag', Tag.create)
+  .get('/tag', Tag.list)
 
 module.exports = router
