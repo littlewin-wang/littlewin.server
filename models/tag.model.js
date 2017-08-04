@@ -36,6 +36,10 @@ TagSchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
+TagSchema.pre('save', function(next) {
+  this.updateAt = Date.now()
+  next()
+})
 TagSchema.pre('findOneAndUpdate', function(next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
