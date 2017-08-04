@@ -41,6 +41,10 @@ CategorySchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
+CategorySchema.pre('save', function(next) {
+  this.updateAt = Date.now()
+  next()
+})
 CategorySchema.pre('findOneAndUpdate', function(next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
