@@ -39,13 +39,53 @@ class Category {
   }
 
   static async list (ctx) {
-    const categories = await CategoryModel.find().populate('super')
+    let { page = 1, per_page = 10 } = ctx.query
+
+    // 过滤条件
+    const options = {
+      sort: { _id: 1 },
+      page: Number(page),
+      limit: Number(per_page)
+    }
+
+    // TODO 增加Article到category的聚合数据
+
+    const categories = await CategoryModel.paginate({}, options)
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "list all categories.",
       data: {
-        categories
+        categories: categories.docs,
+        total: categories.total,
+        limit: categories.limit,
+        page: categories.page,
+        pages: categories.pages
+      }
+    }
+  }
+
+  static async get(ctx) {
+    const id = ctx.params.id
+
+    // name validate
+    let isExist = await CategoryModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "category id not exist."
+      }
+    } else {
+      ctx.status = 200,
+      ctx.body = {
+        success: true,
+        message: "get category success.",
+        data: {
+          category: isExist
+        }
       }
     }
   }
