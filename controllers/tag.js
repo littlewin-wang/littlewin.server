@@ -37,6 +37,33 @@ class Tag {
         ctx.throw(401, 'create tag error.')
       })
   }
+
+  static async list (ctx) {
+    let { page = 1, per_page = 10 } = ctx.query
+
+    // 过滤条件
+    const options = {
+      sort: { _id: 1 },
+      page: Number(page),
+      limit: Number(per_page)
+    }
+
+    // TODO 增加Article到category的聚合数据
+
+    const tags = await TagModel.paginate({}, options)
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "list all categories.",
+      data: {
+        tags: tags.docs,
+        total: tags.total,
+        limit: tags.limit,
+        page: tags.page,
+        pages: tags.pages
+      }
+    }
+  }
 }
 
 module.exports = Tag
