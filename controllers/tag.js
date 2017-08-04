@@ -90,6 +90,48 @@ class Tag {
     }
   }
 
+  static async modify (ctx) {
+    const tag = ctx.request.body
+    const id = ctx.params.id
+
+    // name validate
+    if (!tag.name) {
+      ctx.throw(401, 'tag name expected.')
+      return
+    }
+
+    // if new category's name duplicated
+    const isExist = await TagModel
+      .findOne({name: tag.name})
+
+    if (isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "tag name exists.",
+        data: {
+          tag: isExist
+        }
+      }
+    } else {
+      let tagItem = await TagModel.findByIdAndUpdate(id, tag, { new: true })
+
+      if (!tagItem) {
+        ctx.throw(401, 'No tag with the given ID')
+      } else {
+        ctx.status = 200,
+        ctx.body = {
+          success: true,
+          message: "tag update success.",
+          data: {
+            tag: tagItem
+          }
+        }
+        // TODO sitemap && SEO
+      }
+    }
+  }
+
   static async delete (ctx) {
     const id = ctx.params.id
 
