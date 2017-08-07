@@ -28,7 +28,7 @@ class Article {
       })
   }
 
-  static async list(ctx) {
+  static async list (ctx) {
     let { page, per_page, state, pub, keyword, category, tag, date, hot } = ctx.query
 
     // filter options
@@ -104,6 +104,40 @@ class Article {
         page: articles.page,
         pages: articles.pages
       }
+    }
+  }
+
+  static async modify (ctx) {
+    const { articles, action } = ctx.request.body
+
+    if (!articles || !articles.length) {
+      res.throw(401, '缺少有效参数')
+    }
+
+    let updatePart = {}
+
+    switch (action) {
+      // 移至回收站
+      case 1:
+        updatePart.state = -1
+        break
+      // 移至草稿
+      case 2:
+        updatePart.state = 0
+        break
+      // 移至发布
+      case 3:
+        updatePart.state = 1
+        break
+      default:
+        break
+    }
+
+    let result = await ArticleModel.update({ '_id': { $in: articles }}, { $set: updatePart }, { multi: true })
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "update articles success."
     }
   }
 }
