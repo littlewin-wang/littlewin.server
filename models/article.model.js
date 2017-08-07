@@ -32,7 +32,7 @@ const ArticleSchema = new Schema({
   state: { type: Number, default: 1 },
 
   // 文章公开状态 = // -1私密，0需要密码，1公开
-  public: { type: Number, default: 1 },
+  pub: { type: Number, default: 1 },
 
   // 文章密码 => 加密状态生效
   password: { type: String, default: '' },

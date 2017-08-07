@@ -34,5 +34,6 @@ router
   .delete('/tag/:id', Tag.delete)
 
   .post('/article', Article.create)
+  .get('/article', Article.list)
 
 module.exports = router
