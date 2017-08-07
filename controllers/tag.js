@@ -65,7 +65,7 @@ class Tag {
     }
   }
 
-  static async get(ctx) {
+  static async get (ctx) {
     const id = ctx.params.id
 
     // name validate
