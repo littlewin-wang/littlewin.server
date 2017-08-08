@@ -6,28 +6,6 @@
 const ArticleModel = require('models/article.model')
 
 class Article {
-  static async create (ctx) {
-    const article = ctx.request.body
-
-    if (!article.title || !article.content) {
-      ctx.throw(401, '文章标题或内容为空')
-      return
-    }
-
-    await new ArticleModel(article).save()
-      .then(() => {
-        ctx.status = 200
-        ctx.body = {
-          success: true,
-          message: "创建文章成功"
-          // TODO sitemap && SEO
-        }
-      })
-      .catch(() => {
-        ctx.throw(401, '创建文章失败')
-      })
-  }
-
   static async list (ctx) {
     let { page, per_page, state, pub, keyword, category, tag, date, hot } = ctx.query
 
@@ -139,6 +117,51 @@ class Article {
       success: true,
       message: "更新文章状态成功"
     }
+  }
+
+  static async deleteList (ctx) {
+    const { articles } = ctx.request.body
+
+    console.log(articles)
+
+    if (!articles || !articles.length) {
+      ctx.throw(401, '缺少有效参数')
+      return
+    }
+
+    // TODO SEO delete
+
+    await ArticleModel.remove({ '_id': { $in: articles }})
+
+    // TODO update sitemap
+
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "文章批量删除成功",
+    }
+  }
+
+  static async create (ctx) {
+    const article = ctx.request.body
+
+    if (!article.title || !article.content) {
+      ctx.throw(401, '文章标题或内容为空')
+      return
+    }
+
+    await new ArticleModel(article).save()
+      .then(() => {
+        ctx.status = 200
+        ctx.body = {
+          success: true,
+          message: "创建文章成功"
+          // TODO sitemap && SEO
+        }
+      })
+      .catch(() => {
+        ctx.throw(401, '创建文章失败')
+      })
   }
 
   static async get (ctx) {
