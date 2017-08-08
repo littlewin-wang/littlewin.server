@@ -36,6 +36,7 @@ router
   .post('/article', Article.create)
   .get('/article', Article.list)
   .patch('/article', Article.patch)
+  .delete('/article', Article.deleteList)
   .get('/article/:id', Article.get)
   .put('/article/:id', Article.modify)
   .delete('/article/:id', Article.delete)
