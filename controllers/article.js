@@ -176,6 +176,31 @@ class Article {
       result
     }
   }
+
+  static async modify (ctx) {
+    const id = ctx.params.id
+    const article = ctx.request.body
+
+    // 验证
+    if (!article.title || !article.content) {
+      ctx.throw(401, '文章标题或内容为空')
+      return
+    }
+
+    // 重置信息
+    delete article.meta
+    delete article.createAt
+    delete article.updateAt
+    
+    let result = await ArticleModel.findByIdAndUpdate(id, article, { new: true })
+    // TODO sitemap && SEO
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "文章修改成功",
+      result
+    }
+  }
 }
 
 module.exports = Article
