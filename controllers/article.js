@@ -191,7 +191,7 @@ class Article {
     delete article.meta
     delete article.createAt
     delete article.updateAt
-    
+
     let result = await ArticleModel.findByIdAndUpdate(id, article, { new: true })
     // TODO sitemap && SEO
     ctx.status = 200
@@ -199,6 +199,30 @@ class Article {
       success: true,
       message: "文章修改成功",
       result
+    }
+  }
+
+  static async delete (ctx) {
+    const id = ctx.params.id
+
+    let isExist = await ArticleModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+      ctx.body = {
+        success: false,
+        message: "文章ID不存在"
+      }
+      return
+    }
+
+    await ArticleModel.findByIdAndRemove(id)
+    // TODO sitemap && SEO
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "文章删除成功",
     }
   }
 }
