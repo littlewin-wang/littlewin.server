@@ -19,12 +19,12 @@ class Article {
         ctx.status = 200
         ctx.body = {
           success: true,
-          message: "create article success."
+          message: "创建文章成功"
           // TODO sitemap && SEO
         }
       })
       .catch(() => {
-        ctx.throw(401, 'create article error.')
+        ctx.throw(401, '创建文章失败')
       })
   }
 
@@ -96,7 +96,7 @@ class Article {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "list all articles.",
+      message: "获取文章列表成功",
       data: {
         articles: articles.docs,
         total: articles.total,
@@ -107,7 +107,7 @@ class Article {
     }
   }
 
-  static async modify (ctx) {
+  static async patch (ctx) {
     const { articles, action } = ctx.request.body
 
     if (!articles || !articles.length) {
@@ -137,7 +137,43 @@ class Article {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "update articles success."
+      message: "更新文章状态成功"
+    }
+  }
+
+  static async get (ctx) {
+    const id = ctx.params.id
+
+    // 判断来源
+    const isFindById = Object.is(Number(id), NaN)
+    let result
+
+    if (isFindById) {
+      result = await ArticleModel.findById(id)
+    } else {
+      result = await ArticleModel.findOne({ id: id, state: 1, public: 1 }).populate('category tag').exec()
+    }
+
+    // 是否查找到
+    if (!result) {
+      ctx.throw(401, "无法找到对应ID的文章")
+      return
+    }
+
+    // 每请求一次，浏览次数都要增加
+    if (!isFindById) {
+      result.meta.views += 1;
+      result.save();
+    }
+
+    // TODO 获取相关文章
+
+    // 成功回应
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "获取文章成功",
+      result
     }
   }
 }
