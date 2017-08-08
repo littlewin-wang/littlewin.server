@@ -37,5 +37,6 @@ router
   .get('/article', Article.list)
   .patch('/article', Article.patch)
   .get('/article/:id', Article.get)
+  .put('/article/:id', Article.modify)
 
 module.exports = router
