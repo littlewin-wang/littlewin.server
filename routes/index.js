@@ -38,5 +38,6 @@ router
   .patch('/article', Article.patch)
   .get('/article/:id', Article.get)
   .put('/article/:id', Article.modify)
+  .delete('/article/:id', Article.delete)
 
 module.exports = router
