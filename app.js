@@ -22,6 +22,8 @@ mongoosePaginate.paginate.options = {
   limit: config.APP.LIMIT
 }
 
+app.proxy = true
+
 // middleware
 app.use(convert(logger()))
    .use(bodyparser)
