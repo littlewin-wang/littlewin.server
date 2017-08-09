@@ -11,7 +11,7 @@ class Category {
 
     // name validate
     if (!category.name) {
-      ctx.throw(401, 'category name expected.')
+      ctx.throw(401, '需要提供分类名')
       return
     }
 
@@ -19,7 +19,7 @@ class Category {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "category already exists."
+        message: "分类已存在"
       }
       return
     }
@@ -29,12 +29,12 @@ class Category {
         ctx.status = 200
         ctx.body = {
           success: true,
-          message: "create category success."
+          message: "分类创建成功"
           // TODO sitemap && SEO
         }
       })
       .catch(() => {
-        ctx.throw(401, 'create category error.')
+        ctx.throw(401, '分类创建失败')
       })
   }
 
@@ -54,7 +54,7 @@ class Category {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "list all categories.",
+      message: "获取所有分类",
       data: {
         categories: categories.docs,
         total: categories.total,
@@ -76,13 +76,13 @@ class Category {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "category id not exist."
+        message: "分类ID不存在"
       }
     } else {
       ctx.status = 200,
       ctx.body = {
         success: true,
-        message: "get category success.",
+        message: "分类获取成功",
         data: {
           category: isExist
         }
@@ -96,7 +96,7 @@ class Category {
 
     // name validate
     if (!category.name) {
-      ctx.throw(401, 'category name expected.')
+      ctx.throw(401, '需要提供分类名')
       return
     }
 
@@ -108,7 +108,7 @@ class Category {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "category name exists.",
+        message: "分类名已存在",
         data: {
           category: isExist
         }
@@ -122,12 +122,12 @@ class Category {
       let cate = await CategoryModel.findByIdAndUpdate(id, category, { new: true })
 
       if (!cate) {
-        ctx.throw(401, 'No category with the given ID')
+        ctx.throw(401, '该分类ID不存在')
       } else {
         ctx.status = 200,
         ctx.body = {
           success: true,
-          message: "category update success.",
+          message: "分类更新成功",
           data: {
             category: cate
           }
@@ -148,7 +148,7 @@ class Category {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "category id not exist."
+        message: "分类ID不存在"
       }
       return
     }
@@ -158,7 +158,7 @@ class Category {
     ctx.status = 200,
     ctx.body = {
       success: true,
-      message: "category delete success."
+      message: "分类删除成功"
     }
   }
 }
