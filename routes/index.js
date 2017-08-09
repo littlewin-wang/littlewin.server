@@ -8,6 +8,7 @@ const User = require('controllers/user')
 const Category = require('controllers/category')
 const Tag = require('controllers/tag')
 const Article = require('controllers/article')
+const Comment = require('controllers/comment')
 const middleware = require('middlewares')
 
 router
@@ -40,5 +41,7 @@ router
   .get('/article/:id', Article.get)
   .put('/article/:id', Article.modify)
   .delete('/article/:id', Article.delete)
+
+  .post('/comment', Comment.create)
 
 module.exports = router
