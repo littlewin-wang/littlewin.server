@@ -18,7 +18,7 @@ class User {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "username or password is null."
+        message: "用户名或密码为空"
       }
       return
     }
@@ -39,7 +39,7 @@ class User {
       ctx.status = 200
       ctx.body = {
         success: true,
-        message: "Login success.",
+        message: "登录成功",
         data: {
           name: username,
           token
@@ -54,7 +54,7 @@ class User {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "username or password incorrect."
+        message: "用户名或密码错误"
       }
     } else {
       let token = jwt.sign(
@@ -71,7 +71,7 @@ class User {
       ctx.status = 200
       ctx.body = {
         success: true,
-        message: "Login success.",
+        message: "登录成功",
         data: {
           name: username,
           token
@@ -89,7 +89,7 @@ class User {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "username or password is null."
+        message: "用户名或密码为空"
       }
       return
     }
@@ -100,7 +100,7 @@ class User {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "username exists already."
+        message: "用户名已存在"
       }
       return
     }
@@ -123,7 +123,7 @@ class User {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "create user success.",
+      message: "用户创建成功",
       data: {
         name: username,
         token

@@ -11,7 +11,7 @@ class Tag {
 
     // name validate
     if (!tag.name) {
-      ctx.throw(401, 'tag name expected.')
+      ctx.throw(401, '标签名为空')
       return
     }
 
@@ -19,7 +19,7 @@ class Tag {
       ctx.status = 401
       ctx.body = {
         success: false,
-        message: "tag already exists."
+        message: "标签已存在"
       }
       return
     }
@@ -29,12 +29,12 @@ class Tag {
         ctx.status = 200
         ctx.body = {
           success: true,
-          message: "create tag success."
+          message: "标签创建成功"
           // TODO sitemap && SEO
         }
       })
       .catch(() => {
-        ctx.throw(401, 'create tag error.')
+        ctx.throw(401, '标签创建失败')
       })
   }
 
@@ -54,7 +54,7 @@ class Tag {
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "list all tags.",
+      message: "获取所有标签",
       data: {
         tags: tags.docs,
         total: tags.total,
@@ -76,13 +76,13 @@ class Tag {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "tag id not exist."
+        message: "标签ID不存在"
       }
     } else {
       ctx.status = 200,
       ctx.body = {
         success: true,
-        message: "get tag success.",
+        message: "标签获取成功",
         data: {
           tag: isExist
         }
@@ -96,7 +96,7 @@ class Tag {
 
     // name validate
     if (!tag.name) {
-      ctx.throw(401, 'tag name expected.')
+      ctx.throw(401, '标签名为空')
       return
     }
 
@@ -108,7 +108,7 @@ class Tag {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "tag name exists.",
+        message: "标签已存在",
         data: {
           tag: isExist
         }
@@ -117,12 +117,12 @@ class Tag {
       let tagItem = await TagModel.findByIdAndUpdate(id, tag, { new: true })
 
       if (!tagItem) {
-        ctx.throw(401, 'No tag with the given ID')
+        ctx.throw(401, '标签ID不存在')
       } else {
         ctx.status = 200,
         ctx.body = {
           success: true,
-          message: "tag update success.",
+          message: "标签更新成功",
           data: {
             tag: tagItem
           }
@@ -143,7 +143,7 @@ class Tag {
       ctx.status = 401,
       ctx.body = {
         success: false,
-        message: "tag id not exist."
+        message: "标签ID不存在"
       }
       return
     }
@@ -153,7 +153,7 @@ class Tag {
     ctx.status = 200,
     ctx.body = {
       success: true,
-      message: "tag delete success."
+      message: "标签删除成功"
     }
   }
 }
