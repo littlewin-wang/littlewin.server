@@ -44,5 +44,6 @@ router
 
   .post('/comment', Comment.create)
   .get('/comment', Comment.list)
+  .patch('/comment', Comment.patch)
 
 module.exports = router

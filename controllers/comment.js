@@ -47,7 +47,7 @@ class Comment {
     if (!Object.is(postID, undefined)) {
       querys.postID = postID
     }
-    
+
     const comments = await CommentModel.paginate(querys, options)
     ctx.status = 200
     ctx.body = {
@@ -60,6 +60,24 @@ class Comment {
         page: comments.page,
         pages: comments.pages
       }
+    }
+  }
+
+  // 批量修改评论state (0待审核/ 1通过正常/ -1已删除/ -2垃圾评论)
+  static async patch (ctx) {
+    let { comments, postIDs, state } = ctx.request.body
+    state = Object.is(state, undefined) ? null : Number(state)
+
+    // 验证comments
+    if (!comments || !comments.length || Object.is(state, null) || Object.is(state, NaN) || ![-1, -2, 0, 1].includes(state)) {
+      ctx.throw(401, '参数不对')
+    }
+
+    let result = await CommentModel.update({ '_id': { $in: comments }}, { $set: { state } }, { multi: true })
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "评论批量更新成功"
     }
   }
 
