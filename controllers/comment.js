@@ -127,6 +127,24 @@ class Comment {
       result
     }
   }
+
+  static async modify (ctx) {
+    const id = ctx.params.id
+    const comment = ctx.request.body
+
+    let result = await CommentModel.findByIdAndUpdate(id, comment, { new: true })
+
+    if (comment.postID) {
+      // TODO 更新聚合数据-文章对应的comment数
+    }
+
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "评论修改成功",
+      result
+    }
+  }
 }
 
 module.exports = Comment
