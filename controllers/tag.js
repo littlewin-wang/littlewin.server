@@ -4,6 +4,7 @@
  */
 
 const TagModel = require('models/tag.model')
+const ArticleModel = require('models/article.model')
 
 class Tag {
   static async create (ctx) {
@@ -48,15 +49,35 @@ class Tag {
       limit: Number(per_page)
     }
 
-    // TODO 增加Article到category的聚合数据
-
     const tags = await TagModel.paginate({}, options)
+
+    let $match = {}
+    // 如果是前端来的请求，只能请求公开发布的东西
+    // $match = { state: 1, public: 1 }
+
+    let counts = await ArticleModel.aggregate([
+      { $match },
+      { $unwind : "$tag" },
+      { $group: {
+        _id: "$tag",
+        num_tutorial: { $sum : 1 }}
+      }
+    ])
+
+    let newDocs = tags.docs.map(tag => {
+      const match = counts.find(count => {
+        return String(count._id) === String(tag._id)
+      })
+      tag._doc.count = match ? match.num_tutorial : 0
+      return tag
+    })
+
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "获取所有标签",
       data: {
-        tags: tags.docs,
+        tags: newDocs,
         total: tags.total,
         limit: tags.limit,
         page: tags.page,
