@@ -82,6 +82,23 @@ class Comment {
     }
   }
 
+  static async deleteList (ctx) {
+    const { comments } = ctx.request.body
+
+    if (!comments || !comments.length) {
+      ctx.throw(401, '缺少有效参数')
+      return
+    }
+
+    await CommentModel.remove({ '_id': { $in: comments }})
+
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "批量删除评论成功",
+    }
+  }
+
   static async create (ctx) {
     const comment = ctx.request.body
 
