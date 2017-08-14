@@ -6,6 +6,63 @@
 const CommentModel = require('models/comment.model')
 
 class Comment {
+  static async list (ctx) {
+    let { sort = -1, page, per_page, keyword = '', postID, state } = ctx.query
+
+    sort = Number(sort)
+
+    // filter options
+    const options ={
+      sort: { _id: -1 },
+      page: Number(page || 1),
+      limit: Number(per_page || 40)
+    }
+
+    // sort field
+    if ([1, -1].includes(sort)) {
+      options.sort = { _id: sort }
+    } else if (Object.is(sort, 2)) {
+      options.sort = { likes: -1 }
+    }
+
+    // 查询参数
+    let querys = {}
+
+    // 按照state查询
+    if (['0', '1', '-1', '-2'].includes(state)) {
+      querys.state = state
+    }
+
+    // 关键词查询
+    if (keyword) {
+      const keywordReg = new RegExp(keyword);
+      querys['$or'] = [
+        { 'content': keywordReg },
+        { 'author.name': keywordReg },
+        { 'author.email': keywordReg }
+      ]
+    }
+
+    // postID查询
+    if (!Object.is(postID, undefined)) {
+      querys.postID = postID
+    }
+    
+    const comments = await CommentModel.paginate(querys, options)
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "评论列表获取成功",
+      data: {
+        comments: comments.docs,
+        total: comments.total,
+        limit: comments.limit,
+        page: comments.page,
+        pages: comments.pages
+      }
+    }
+  }
+
   static async create (ctx) {
     const comment = ctx.request.body
 
