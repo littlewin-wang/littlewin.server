@@ -89,7 +89,7 @@ class Article {
     const { articles, action } = ctx.request.body
 
     if (!articles || !articles.length) {
-      res.throw(401, '缺少有效参数')
+      ctx.throw(401, '缺少有效参数')
     }
 
     let updatePart = {}
