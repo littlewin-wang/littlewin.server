@@ -47,5 +47,6 @@ router
   .patch('/comment', Comment.patch)
   .get('/comment/:id', Comment.get)
   .put('/comment/:id', Comment.modify)
+  .delete('/comment/:id', Comment.delete)
 
 module.exports = router

@@ -145,6 +145,29 @@ class Comment {
       result
     }
   }
+
+  static async delete (ctx) {
+    const id = ctx.params.id
+
+    let isExist = await CommentModel
+      .findOne({_id: id})
+
+    if (!isExist) {
+      ctx.status = 401,
+        ctx.body = {
+          success: false,
+          message: "评论ID不存在"
+        }
+      return
+    }
+
+    await CommentModel.findByIdAndRemove(id)
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "评论删除成功",
+    }
+  }
 }
 
 module.exports = Comment
