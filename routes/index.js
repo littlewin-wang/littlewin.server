@@ -43,5 +43,6 @@ router
   .delete('/article/:id', Article.delete)
 
   .post('/comment', Comment.create)
+  .get('/comment', Comment.list)
 
 module.exports = router
