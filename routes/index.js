@@ -45,6 +45,7 @@ router
   .post('/comment', Comment.create)
   .get('/comment', Comment.list)
   .patch('/comment', Comment.patch)
+  .delete('/comment', Comment.deleteList)
   .get('/comment/:id', Comment.get)
   .put('/comment/:id', Comment.modify)
   .delete('/comment/:id', Comment.delete)
