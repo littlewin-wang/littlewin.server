@@ -71,6 +71,7 @@ class Comment {
     // 验证comments
     if (!comments || !comments.length || Object.is(state, null) || Object.is(state, NaN) || ![-1, -2, 0, 1].includes(state)) {
       ctx.throw(401, '参数不对')
+      return
     }
 
     let result = await CommentModel.update({ '_id': { $in: comments }}, { $set: { state } }, { multi: true })
@@ -104,6 +105,26 @@ class Comment {
       body: {
         result
       }
+    }
+  }
+
+  static async get (ctx) {
+    const id = ctx.params.id
+
+    let result = await CommentModel.findById(id)
+
+    // 是否查找到
+    if (!result) {
+      ctx.throw(401, "评论获取失败")
+      return
+    }
+
+    // 成功回应
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "评论获取成功",
+      result
     }
   }
 }
