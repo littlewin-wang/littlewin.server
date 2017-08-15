@@ -123,12 +123,8 @@ class Comment {
         { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
       ])
 
-      if (comments.length === 0) {
-        await ArticleModel.update({ id: result.postID }, { $set: { 'meta.comments': 0 }})
-      } else {
-        for (let item of comments) {
-          await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
-        }
+      for (let item of comments) {
+        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
       }
     }
 
@@ -168,18 +164,14 @@ class Comment {
 
     let result = await CommentModel.findByIdAndUpdate(id, comment, { new: true })
 
-    if (comment.postID) {
+    if (result.postID) {
       let comments = await CommentModel.aggregate([
-        { $match: { state: 1, postID: comment.postID}},
+        { $match: { state: 1, postID: result.postID}},
         { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
       ])
 
-      if (comments.length === 0) {
-        await ArticleModel.update({ id: comment.postID }, { $set: { 'meta.comments': 0 }})
-      } else {
-        for (let item of comments) {
-          await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
-        }
+      for (let item of comments) {
+        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
       }
     }
 
