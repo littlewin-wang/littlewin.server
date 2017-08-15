@@ -4,6 +4,7 @@
  */
 
 const CategoryModel = require('models/category.model')
+const ArticleModel = require('models/article.model')
 
 class Category {
   static async create (ctx) {
@@ -48,15 +49,35 @@ class Category {
       limit: Number(per_page)
     }
 
-    // TODO 增加Article到category的聚合数据
-
     const categories = await CategoryModel.paginate({}, options)
+
+    let $match = {}
+    // 如果是前端来的请求，只能请求公开发布的东西
+    // $match = { state: 1, public: 1 }
+
+    let counts = await ArticleModel.aggregate([
+      { $match },
+      { $unwind : "$category" },
+      { $group: {
+        _id: "$category",
+        num_tutorial: { $sum : 1 }}
+      }
+    ])
+
+    let newDocs = categories.docs.map(category => {
+      const match = counts.find(count => {
+        return String(count._id) === String(category._id)
+      })
+      category._doc.count = match ? match.num_tutorial : 0
+      return category
+    })
+
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "获取所有分类",
+      message: "分类列表获取成功",
       data: {
-        categories: categories.docs,
+        categories: newDocs,
         total: categories.total,
         limit: categories.limit,
         page: categories.page,

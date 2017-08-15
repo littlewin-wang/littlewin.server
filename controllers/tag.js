@@ -93,6 +93,9 @@ class Tag {
         pages: tags.pages
       }
     }
+
+    // TODO 区分管理员请求和前端请求
+    // TODO 是否需要做前台请求缓存
   }
 
   static async get (ctx) {
