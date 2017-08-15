@@ -174,6 +174,14 @@ class Category {
       return
     }
 
+    // 如果删除项为别的项的super
+    let result = await CategoryModel.find({ super: id })
+
+    if (result.length) {
+      // 更新子项的super
+      await CategoryModel.find({ '_id': { $in: Array.from(result, c => c._id) } }).update({ $set: { super: isExist.super || null }})
+    }
+
     await CategoryModel.remove({_id: id})
 
     ctx.status = 200,
