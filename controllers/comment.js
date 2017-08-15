@@ -4,6 +4,7 @@
  */
 
 const CommentModel = require('models/comment.model')
+const ArticleModel = require('models/article.model')
 
 class Comment {
   static async list (ctx) {
@@ -115,11 +116,25 @@ class Comment {
     // TODO 增加过滤机制
     let result = await new CommentModel(comment).save()
 
+    // 发表comment后更新article的meta.comments值
+    let comments = await CommentModel.aggregate([
+      { $match: { state: 1, postID: result.postID}},
+      { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+    ])
+
+    if (comments.length === 0) {
+      await ArticleModel.update({ id: result.postID }, { $set: { 'meta.comments': 0 }})
+    } else {
+      for (let item of comments) {
+        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+      }
+    }
+
     ctx.status = 200,
     ctx.body = {
       success: true,
       message: "评论发布成功",
-      body: {
+      data: {
         result
       }
     }
