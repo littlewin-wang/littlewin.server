@@ -174,7 +174,7 @@ class Article {
     if (isFindById) {
       result = await ArticleModel.findById(id)
     } else {
-      result = await ArticleModel.findOne({ id: id, state: 1, public: 1 }).populate('category tag').exec()
+      result = await ArticleModel.findOne({ id: id, state: 1, pub: 1 }).populate('category tag').exec()
     }
 
     // 是否查找到
@@ -189,14 +189,19 @@ class Article {
       result.save();
     }
 
-    // TODO 获取相关文章
+    let newResult = result.toObject()
+    // 按照tag请求相似文章
+    if (!isFindById && result.tag.length) {
+      let related = await ArticleModel.find({ state: 1, pub: 1, tag: { $in: result.tag.map(t => t._id) }})
+      newResult.related = related
+    }
 
     // 成功回应
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "获取文章成功",
-      result
+      newResult
     }
   }
 
