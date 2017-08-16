@@ -91,7 +91,31 @@ class Comment {
       return
     }
 
+    let postIDs = []
+
+    for (let comment of comments) {
+      let result = await CommentModel.findById(comment._id)
+      postIDs.push(result.postID)
+    }
+
     await CommentModel.remove({ '_id': { $in: comments }})
+
+    for (let id of postIDs) {
+      if (id) {
+        let comments = await CommentModel.aggregate([
+          { $match: { state: 1, postID: id}},
+          { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        ])
+
+        if (comments.length === 0) {
+          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 }})
+        } else {
+          for (let item of comments) {
+            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+          }
+        }
+      }
+    }
 
     ctx.status = 200
     ctx.body = {
@@ -173,7 +197,7 @@ class Comment {
       ])
 
       if (comments.length === 0) {
-        await ArticleModel.update({ id: isExist.postID }, { $set: { 'meta.comments': 0 }})
+        await ArticleModel.update({ id: before.postID }, { $set: { 'meta.comments': 0 }})
       } else {
         for (let item of comments) {
           await ArticleModel.update({id: item._id}, {$set: {'meta.comments': item.num_tutorial}})
