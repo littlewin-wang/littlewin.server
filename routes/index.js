@@ -9,6 +9,7 @@ const Category = require('controllers/category')
 const Tag = require('controllers/tag')
 const Article = require('controllers/article')
 const Comment = require('controllers/comment')
+const Qiniu = require('controllers/qiniu')
 const middleware = require('middlewares')
 
 router
@@ -16,7 +17,9 @@ router
     ctx.body = {
       title: "littlewin.server API",
       version: "v1",
-      author: "littlewin.wang@gmail.com"
+      author: "littlewin.wang@gmail.com",
+      site: "littlewin.wang",
+      guide: "https://github.com/littlewin-wang/littlewin.server/blob/master/README.md"
     }
   })
   .post('/login', User.login)
@@ -49,5 +52,7 @@ router
   .get('/comment/:id', Comment.get)
   .put('/comment/:id', Comment.modify)
   .delete('/comment/:id', Comment.delete)
+
+  .get('/qiniu', Qiniu.getToken)
 
 module.exports = router
