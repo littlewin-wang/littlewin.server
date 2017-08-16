@@ -9,17 +9,24 @@
  * @production  生产环境配置
  */
 
-let AUTH = {
+const AUTH = {
   default: { name: 'admin', password: '123456' },
   jwtTokenSecret: 'littlewin'
 }
 
-let APP = {
+const APP = {
   ROOT_PATH: __dirname,
   LIMIT: 16
 }
 
-let session = {
+const QINIU = {
+  accessKey: 'your access key',
+  secretKey: 'your secret key',
+  bucket: 'your bucket name',
+  origin: 'your bucket origin',
+}
+
+const session = {
   key: 'littlewin',
   maxAge: 604800000,
   overwrite: true,
@@ -31,6 +38,7 @@ module.exports = {
   development: {
     AUTH,
     APP,
+    QINIU,
     session,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-dev'
@@ -42,6 +50,7 @@ module.exports = {
   production: {
     AUTH,
     APP,
+    QINIU,
     session,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-prd'
