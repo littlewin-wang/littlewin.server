@@ -162,8 +162,26 @@ class Comment {
     const id = ctx.params.id
     const comment = ctx.request.body
 
+    let before = await CommentModel.findById(id)
     let result = await CommentModel.findByIdAndUpdate(id, comment, { new: true })
 
+    // 更新修改前的postID对应的meta.comments值
+    if (before.postID) {
+      let comments = await CommentModel.aggregate([
+        { $match: { state: 1, postID: before.postID}},
+        { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+      ])
+
+      if (comments.length === 0) {
+        await ArticleModel.update({ id: isExist.postID }, { $set: { 'meta.comments': 0 }})
+      } else {
+        for (let item of comments) {
+          await ArticleModel.update({id: item._id}, {$set: {'meta.comments': item.num_tutorial}})
+        }
+      }
+    }
+
+    // 更新修改后的postID对应的meta.comments值
     if (result.postID) {
       let comments = await CommentModel.aggregate([
         { $match: { state: 1, postID: result.postID}},
