@@ -1,5 +1,5 @@
 {
-  "name": "littlewin-blog-server",
+  "name": "littlewin.server",
   "version": "0.1.0",
   "private": true,
   "scripts": {
