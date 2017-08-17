@@ -13,6 +13,7 @@ const Article = require('controllers/article')
 const Comment = require('controllers/comment')
 const Qiniu = require('controllers/qiniu')
 const Github = require('controllers/github')
+const Site = require('controllers/site')
 const middleware = require('middlewares')
 
 router
@@ -55,6 +56,9 @@ router
   .get('/comment/:id', Comment.get)
   .put('/comment/:id', Comment.modify)
   .delete('/comment/:id', Comment.delete)
+
+  .get('/site', Site.get)
+  .put('/site', Site.modify)
 
   .get('/qiniu', Qiniu.getToken)
   .get('/github', Github.list)
