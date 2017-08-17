@@ -14,6 +14,7 @@ const Comment = require('controllers/comment')
 const Qiniu = require('controllers/qiniu')
 const Github = require('controllers/github')
 const Site = require('controllers/site')
+const Like = require('controllers/like')
 const middleware = require('middlewares')
 
 router
@@ -62,5 +63,7 @@ router
 
   .get('/qiniu', Qiniu.getToken)
   .get('/github', Github.list)
+
+  .post('/like', Like.like)
 
 module.exports = router
