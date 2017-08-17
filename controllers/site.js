@@ -34,6 +34,11 @@ class Site {
     // 如果有_id则去除_id
     delete siteInfo._id
 
+    // 检测黑名单和ping地址列表不能存入空元素
+    siteInfo.blacklist.ips = (siteInfo.blacklist.ips || []).filter(t => !!t)
+    siteInfo.blacklist.mails = (siteInfo.blacklist.mails || []).filter(t => !!t)
+    siteInfo.blacklist.keywords = (siteInfo.blacklist.keywords || []).filter(t => !!t)
+
     let result = !!_id ? await SiteModel.findByIdAndUpdate(_id, siteInfo, { new: true }) : await new SiteModel(siteInfo).save()
 
     ctx.status = 200,

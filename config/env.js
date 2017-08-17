@@ -22,10 +22,10 @@ const APP = {
 }
 
 const QINIU = {
-  accessKey: 'your access key',
-  secretKey: 'your secret key',
-  bucket: 'your bucket name',
-  origin: 'your bucket origin',
+  accessKey: '-rQlXW3eYxSuLxyJJfBWDAuYVB3VMMEvpT7DcHUI',
+  secretKey: 'MMZhc-eBH-9Pb8riQmkpYZfkRxGql24Zuz2XzI7o',
+  bucket: 'littlewin',
+  origin: '7xpot0.com1.z0.glb.clouddn.com',
 }
 
 const GITHUB = {
