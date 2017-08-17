@@ -3,7 +3,9 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
-const router = require('koa-router')()
+const router = require('koa-router')({
+  prefix: '/api'
+})
 const User = require('controllers/user')
 const Category = require('controllers/category')
 const Tag = require('controllers/tag')
