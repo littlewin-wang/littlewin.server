@@ -4,6 +4,8 @@
  *
  * @AUTH 默认账户
  * @mongo && port  数据库连接配置
+ * @QINIU 七牛密钥
+ * @GITHUB github账号
  *
  * @development 开发环境配置
  * @production  生产环境配置
@@ -26,6 +28,10 @@ const QINIU = {
   origin: 'your bucket origin',
 }
 
+const GITHUB = {
+  account: 'littlewin-wang',
+}
+
 const session = {
   key: 'littlewin',
   maxAge: 604800000,
@@ -39,6 +45,7 @@ module.exports = {
     AUTH,
     APP,
     QINIU,
+    GITHUB,
     session,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-dev'
@@ -51,6 +58,7 @@ module.exports = {
     AUTH,
     APP,
     QINIU,
+    GITHUB,
     session,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-prd'
