@@ -12,7 +12,7 @@
  */
 
 const AUTH = {
-  default: { name: 'admin', password: '123456' },
+  default: { name: 'littlewin', password: 'abcd@1234' },
   jwtTokenSecret: 'littlewin'
 }
 
