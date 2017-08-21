@@ -27,8 +27,9 @@ router
       guide: "https://github.com/littlewin-wang/littlewin.server/blob/master/README.md"
     }
   })
-  .post('/login', User.login)
-  .post('/user', middleware.verifyToken, User.create)
+  .post('/user', User.login)
+  .get('/user', User.get)
+  .put('/user', User.modify)
 
   .post('/category', Category.create)
   .get('/category', Category.list)

@@ -9,103 +9,35 @@ const UserModel = require('models/user.model')
 const config = require('config/env')[process.env.NODE_ENV||'development']
 
 class User {
-  static async login (ctx) {
-    const { username, password } = ctx.request.body
+  static async get (ctx) {
+    let user = await UserModel.find({}, '-_id username slogan gravatar')
 
-    // 空值检测
-    // TODO 考虑是否需要做validation
-    if (!username || !password) {
-      ctx.status = 401
-      ctx.body = {
-        success: false,
-        message: "用户名或密码为空"
-      }
-      return
-    }
-
-    // 默认账户
-    if (username === config.AUTH.default.name && password === config.AUTH.default.password) {
-      let token = jwt.sign(
-        {
-          username,
-          password
-        },
-        config.AUTH.jwtTokenSecret,
-        {
-          expiresIn: '1h'
-        }
-      )
-
-      ctx.status = 200
-      ctx.body = {
-        success: true,
-        message: "登录成功",
-        data: {
-          name: username,
-          token
-        }
-      }
-      return
-    }
-
-    // 用户名或密码错误
-    const result = await UserModel.findOne({username, password: md5(password)})
-    if (!result) {
-      ctx.status = 401
-      ctx.body = {
-        success: false,
-        message: "用户名或密码错误"
-      }
-    } else {
-      let token = jwt.sign(
-        {
-          username,
-          password
-        },
-        config.AUTH.jwtTokenSecret,
-        {
-          expiresIn: '1h'
-        }
-      )
-
-      ctx.status = 200
-      ctx.body = {
-        success: true,
-        message: "登录成功",
-        data: {
-          name: username,
-          token
-        }
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "用户信息获取成功",
+      data: {
+        user
       }
     }
   }
 
-  static async create (ctx) {
+  static async login (ctx) {
     const { username, password } = ctx.request.body
 
-    // 空值检测
-    // TODO 考虑是否需要做validation
-    if (!username || !password) {
-      ctx.status = 401
-      ctx.body = {
-        success: false,
-        message: "用户名或密码为空"
+    let user = await UserModel.find({}, '-_id password')
+
+    if (user.length) {
+      if (md5(password) !== user[0].password) {
+        ctx.throw(401, "大胆！擅闯此地！")
       }
-      return
+    } else {
+      if (password !== config.AUTH.default.password) {
+        ctx.throw(401, "大胆！擅闯此地！")
+      }
     }
 
-    // 是否已存在
-    let user = await UserModel.findOne({ username }).exec()
-    if (user) {
-      ctx.status = 401
-      ctx.body = {
-        success: false,
-        message: "用户名已存在"
-      }
-      return
-    }
-
-    const token = jwt.sign(
+    let token = jwt.sign(
       {
         username,
         password
@@ -115,18 +47,62 @@ class User {
         expiresIn: '1h'
       }
     )
-    await UserModel.create({
-      username,
-      password: md5(password),
-      token
-    })
+
     ctx.status = 200
     ctx.body = {
       success: true,
-      message: "用户创建成功",
+      message: "登录成功",
       data: {
-        name: username,
         token
+      }
+    }
+  }
+
+  static async modify (ctx) {
+    const { username, slogan, gravatar, password, new_password, new_password_ag } = ctx.request.body
+    let newUser
+
+    // 验证密码
+    if (!!password && ((!new_password || !new_password_ag) || !Object.is(new_password, new_password_ag))) {
+      ctx.throw(401, "密码不一致或无效")
+    }
+
+    if (!!password && [new_password, new_password_ag].includes(password)) {
+      ctx.throw(401, "新旧密码不可一致")
+    }
+
+    let user = await UserModel.find({}, '_id username slogan gravatar password')
+
+    if (user.length) {
+      if (md5(password) !== user[0].password) {
+        ctx.throw(401, "大胆！擅闯此地！")
+      } else {
+        newUser = await UserModel.findByIdAndUpdate(user[0]._id, {
+          username,
+          password: md5(new_password),
+          slogan,
+          gravatar
+        }, { new: true })
+      }
+    } else {
+      if (password !== config.AUTH.default.password) {
+        ctx.throw(401, "大胆！擅闯此地！")
+      } else {
+        newUser = await new UserModel({
+          username,
+          password: md5(new_password),
+          slogan,
+          gravatar
+        }).save()
+      }
+    }
+
+    ctx.status = 200
+    ctx.body = {
+      success: true,
+      message: "用户修改成功",
+      data: {
+        user: newUser
       }
     }
   }
