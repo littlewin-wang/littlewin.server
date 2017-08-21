@@ -59,16 +59,22 @@ class User {
   }
 
   static async modify (ctx) {
-    const { username, slogan, gravatar, password, new_password, new_password_ag } = ctx.request.body
-    let newUser
+    const { username, slogan, gravatar, password, new_password = '', new_password_ag = '' } = ctx.request.body
+    let newUser, newPWD
 
-    // 验证密码
-    if (!!password && ((!new_password || !new_password_ag) || !Object.is(new_password, new_password_ag))) {
-      ctx.throw(401, "密码不一致或无效")
-    }
+    if (!!new_password && !!new_password_ag) {
+      // 验证密码
+      if (!!password && ((!new_password || !new_password_ag) || !Object.is(new_password, new_password_ag))) {
+        ctx.throw(401, "密码不一致或无效")
+      }
 
-    if (!!password && [new_password, new_password_ag].includes(password)) {
-      ctx.throw(401, "新旧密码不可一致")
+      if (!!password && [new_password, new_password_ag].includes(password)) {
+        ctx.throw(401, "新旧密码不可一致")
+      }
+
+      newPWD = new_password
+    } else {
+      newPWD = password
     }
 
     let user = await UserModel.find({}, '_id username slogan gravatar password')
@@ -79,7 +85,7 @@ class User {
       } else {
         newUser = await UserModel.findByIdAndUpdate(user[0]._id, {
           username,
-          password: md5(new_password),
+          password: md5(newPWD),
           slogan,
           gravatar
         }, { new: true })
@@ -90,7 +96,7 @@ class User {
       } else {
         newUser = await new UserModel({
           username,
-          password: md5(new_password),
+          password: md5(newPWD),
           slogan,
           gravatar
         }).save()
