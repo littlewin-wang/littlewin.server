@@ -34,7 +34,7 @@ class Site {
     if (!!site) {
       _id = site._id
       // keep likes when update site
-      siteInfo.meta.likes = site.meta.likes
+      siteInfo.meta = site.meta
     }
 
     // 如果有_id则去除_id
