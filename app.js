@@ -25,7 +25,9 @@ mongoosePaginate.paginate.options = {
 
 app.proxy = true
 
-app.use(cors())
+app.use(cors({
+  credentials: true
+}))
 
 // middleware
 app.use(convert(logger()))
