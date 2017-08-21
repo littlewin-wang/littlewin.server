@@ -2,6 +2,7 @@ require('app-module-path').addPath(__dirname + '/');
 
 const Koa = require('koa')
 const app = new Koa()
+const cors = require('kcors')
 
 const convert = require('koa-convert')
 const bodyparser = require('koa-bodyparser')()
@@ -23,6 +24,8 @@ mongoosePaginate.paginate.options = {
 }
 
 app.proxy = true
+
+app.use(cors())
 
 // middleware
 app.use(convert(logger()))
