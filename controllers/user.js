@@ -12,13 +12,17 @@ class User {
   static async get (ctx) {
     let user = await UserModel.find({}, '-_id username slogan gravatar')
 
-    ctx.status = 200
-    ctx.body = {
-      success: true,
-      message: "用户信息获取成功",
-      data: {
-        user
+    if (user.length) {
+      ctx.status = 200
+      ctx.body = {
+        success: true,
+        message: "用户信息获取成功",
+        data: {
+          user: user[0]
+        }
       }
+    } else {
+      ctx.throw(404, '暂无用户信息')
     }
   }
 
