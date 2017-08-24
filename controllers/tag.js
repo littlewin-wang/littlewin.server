@@ -137,7 +137,7 @@ class Tag {
     const isExist = await TagModel
       .findOne({name: tag.name})
 
-    if (isExist) {
+    if (isExist && String(isExist._id) !== id) {
       ctx.status = 401,
       ctx.body = {
         success: false,
