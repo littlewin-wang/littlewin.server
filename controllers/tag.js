@@ -101,6 +101,8 @@ class Tag {
   static async deleteList (ctx) {
     const { tags } = ctx.request.body
 
+    console.log(tags)
+
     if (!tags || !tags.length) {
       ctx.throw(401, '缺少有效参数')
       return
