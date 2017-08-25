@@ -98,6 +98,26 @@ class Tag {
     // TODO 是否需要做前台请求缓存
   }
 
+  static async deleteList (ctx) {
+    const { tags } = ctx.request.body
+
+    if (!tags || !tags.length) {
+      ctx.throw(401, '缺少有效参数')
+      return
+    }
+
+    let result = await TagModel.remove({ '_id': { $in: tags }})
+
+    ctx.status = 200,
+    ctx.body = {
+      success: true,
+      message: "标签批量删除成功",
+      data: {
+        result
+      }
+    }
+  }
+
   static async get (ctx) {
     const id = ctx.params.id
 
