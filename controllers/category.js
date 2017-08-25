@@ -125,7 +125,7 @@ class Category {
     const isExist = await CategoryModel
       .findOne({name: category.name})
 
-    if (isExist) {
+    if (isExist && String(isExist._id) !== id) {
       ctx.status = 401,
       ctx.body = {
         success: false,
