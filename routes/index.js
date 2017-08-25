@@ -39,6 +39,7 @@ router
 
   .post('/tag', Tag.create)
   .get('/tag', Tag.list)
+  .delete('/tag', Tag.deleteList)
   .get('/tag/:id', Tag.get)
   .put('/tag/:id', Tag.modify)
   .delete('/tag/:id', Tag.delete)
