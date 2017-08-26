@@ -40,7 +40,7 @@ class Category {
   }
 
   static async list (ctx) {
-    let { page = 1, per_page = 10 } = ctx.query
+    let { page = 1, per_page = 10, keyword = '' } = ctx.query
 
     // 过滤条件
     const options = {
@@ -49,7 +49,16 @@ class Category {
       limit: Number(per_page)
     }
 
-    const categories = await CategoryModel.paginate({}, options)
+    // 查询参数
+    const keywordReg = new RegExp(keyword)
+    const query = {
+      "$or": [
+        { 'name': keywordReg },
+        { 'description': keywordReg }
+      ]
+    }
+
+    const categories = await CategoryModel.paginate(query, options)
 
     let $match = {}
     // 如果是前端来的请求，只能请求公开发布的东西
