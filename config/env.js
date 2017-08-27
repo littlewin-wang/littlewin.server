@@ -25,7 +25,8 @@ const QINIU = {
   accessKey: '-rQlXW3eYxSuLxyJJfBWDAuYVB3VMMEvpT7DcHUI',
   secretKey: 'MMZhc-eBH-9Pb8riQmkpYZfkRxGql24Zuz2XzI7o',
   bucket: 'littlewin',
-  origin: '7xpot0.com1.z0.glb.clouddn.com',
+  origin: 'http://7xpot0.com1.z0.glb.clouddn.com',
+  uploadURL: 'http://up-z0.qiniu.com' 
 }
 
 const GITHUB = {
