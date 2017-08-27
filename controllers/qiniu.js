@@ -14,7 +14,9 @@ class Qiniu {
       success: true,
       message: "获取七牛token",
       data: {
-        uptoken: client.uploadToken()
+        origin: config.QINIU.origin,
+        uploadURL: config.QINIU.uploadURL,
+        upToken: client.uploadToken()
       }
     }
   }
