@@ -41,7 +41,7 @@ const ArticleSchema = new Schema({
   tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}],
 
   // 文章分类
-  category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }],
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
 
   // 其他元信息
   meta: {
