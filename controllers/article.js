@@ -201,7 +201,7 @@ class Article {
     ctx.body = {
       success: true,
       message: "获取文章成功",
-      newResult
+      data: newResult
     }
   }
 
@@ -226,7 +226,7 @@ class Article {
     ctx.body = {
       success: true,
       message: "文章修改成功",
-      result
+      data: result
     }
   }
 
