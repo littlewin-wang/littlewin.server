@@ -66,7 +66,7 @@ class Comment {
 
   // 批量修改评论state (0待审核/ 1通过正常/ -1已删除/ -2垃圾评论)
   static async patch (ctx) {
-    let { comments, postIDs, state } = ctx.request.body
+    let { comments, state } = ctx.request.body
     state = Object.is(state, undefined) ? null : Number(state)
 
     // 验证comments
@@ -75,7 +75,32 @@ class Comment {
       return
     }
 
+    let postIDs = []
+
+    for (let comment of comments) {
+      let result = await CommentModel.findById(comment._id)
+      postIDs.push(result.postID)
+    }
+
     let result = await CommentModel.update({ '_id': { $in: comments }}, { $set: { state } }, { multi: true })
+    
+    for (let id of postIDs) {
+      if (id) {
+        let comments = await CommentModel.aggregate([
+          { $match: { state: 1, postID: id}},
+          { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        ])
+
+        if (comments.length === 0) {
+          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 }})
+        } else {
+          for (let item of comments) {
+            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+          }
+        }
+      }
+    }
+
     ctx.status = 200
     ctx.body = {
       success: true,
