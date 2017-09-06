@@ -45,7 +45,7 @@ class Comment {
     }
 
     // postID查询
-    if (!Object.is(postID, undefined)) {
+    if (!Object.is(postID, '') && !Object.is(postID, undefined)) {
       querys.postID = postID
     }
 
