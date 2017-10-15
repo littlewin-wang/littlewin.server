@@ -11,7 +11,7 @@ class Article {
 
     // filter options
     const options ={
-      sort: { _id: -1 },
+      sort: { createAt: -1 },
       page: Number(page || 1),
       limit: Number(per_page || 10),
       populate: ['category', 'tag'],
