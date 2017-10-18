@@ -38,7 +38,7 @@ const ArticleSchema = new Schema({
   password: { type: String, default: '' },
 
   // 文章标签
-  tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}],
+  tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
 
   // 文章分类
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
@@ -54,7 +54,13 @@ const ArticleSchema = new Schema({
   createAt: { type: Date, default: Date.now },
 
   // 修改时间
-  updateAt: { type: Date }
+  updateAt: { type: Date },
+
+  // 扩展属性
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]
 })
 
 ArticleSchema.set('toObject', { getters: true })
@@ -69,16 +75,16 @@ ArticleSchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
-ArticleSchema.pre('save', function(next) {
+ArticleSchema.pre('save', function (next) {
   this.updateAt = Date.now()
   next()
 })
-ArticleSchema.pre('findOneAndUpdate', function(next) {
+ArticleSchema.pre('findOneAndUpdate', function (next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
 })
 
-ArticleSchema.virtual('t_content').get(function() {
+ArticleSchema.virtual('t_content').get(function () {
   const content = this.content
   return !!content ? content.substring(0, 130) : content
 })

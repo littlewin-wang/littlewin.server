@@ -23,7 +23,13 @@ const TagSchema = new Schema({
   createAt: { type: Date, default: Date.now },
 
   // 修改时间
-  updateAt: { type: Date }
+  updateAt: { type: Date },
+
+  // 扩展属性
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]
 })
 
 // 翻页 + 自增ID插件配置
@@ -36,11 +42,11 @@ TagSchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
-TagSchema.pre('save', function(next) {
+TagSchema.pre('save', function (next) {
   this.updateAt = Date.now()
   next()
 })
-TagSchema.pre('findOneAndUpdate', function(next) {
+TagSchema.pre('findOneAndUpdate', function (next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
 })

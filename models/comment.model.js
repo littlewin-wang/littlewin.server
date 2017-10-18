@@ -16,7 +16,7 @@ const CommentSchema = new Schema({
   thirdID: { type: Number },
 
   // 评论所在文章id， 0代表系统留言板
-  postID: { type: Number, required: true},
+  postID: { type: Number, required: true },
 
   // pid, 0代表默认留言
   pid: { type: Number, default: 0 },
@@ -53,7 +53,13 @@ const CommentSchema = new Schema({
   createAt: { type: Date, default: Date.now },
 
   // 修改时间
-  updateAt: { type: Date }
+  updateAt: { type: Date },
+
+  // 扩展属性
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]
 })
 
 // 翻页 + 自增ID插件配置
@@ -66,11 +72,11 @@ CommentSchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
-CommentSchema.pre('save', function(next) {
+CommentSchema.pre('save', function (next) {
   this.updateAt = Date.now()
   next()
 })
-CommentSchema.pre('findOneAndUpdate', function(next) {
+CommentSchema.pre('findOneAndUpdate', function (next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
 })

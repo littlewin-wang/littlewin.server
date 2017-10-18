@@ -26,7 +26,13 @@ const CategorySchema = new Schema({
   createAt: { type: Date, default: Date.now },
 
   // 修改时间
-  updateAt: { type: Date }
+  updateAt: { type: Date },
+
+  // 扩展属性
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]
 })
 
 CategorySchema.set('toObject', { getters: true })
@@ -41,11 +47,11 @@ CategorySchema.plugin(autoIncrement.plugin, {
 })
 
 // 更新修改时间
-CategorySchema.pre('save', function(next) {
+CategorySchema.pre('save', function (next) {
   this.updateAt = Date.now()
   next()
 })
-CategorySchema.pre('findOneAndUpdate', function(next) {
+CategorySchema.pre('findOneAndUpdate', function (next) {
   this.findOneAndUpdate({}, { updateAt: Date.now() })
   next()
 })
