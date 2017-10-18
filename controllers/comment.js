@@ -6,6 +6,8 @@
 const CommentModel = require('models/comment.model')
 const ArticleModel = require('models/article.model')
 
+const geoip = require('geoip-lite')
+
 class Comment {
   static async list (ctx) {
     let { sort = -1, page, per_page, keyword = '', postID, state } = ctx.query
@@ -13,7 +15,7 @@ class Comment {
     sort = Number(sort)
 
     // filter options
-    const options ={
+    const options = {
       sort: { createAt: -1 },
       page: Number(page || 1),
       limit: Number(per_page || 40)
@@ -82,20 +84,20 @@ class Comment {
       postIDs.push(result.postID)
     }
 
-    let result = await CommentModel.update({ '_id': { $in: comments }}, { $set: { state } }, { multi: true })
-    
+    let result = await CommentModel.update({ '_id': { $in: comments } }, { $set: { state } }, { multi: true })
+
     for (let id of postIDs) {
       if (id) {
         let comments = await CommentModel.aggregate([
-          { $match: { state: 1, postID: id}},
-          { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+          { $match: { state: 1, postID: id } },
+          { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
         ])
 
         if (comments.length === 0) {
-          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 }})
+          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 } })
         } else {
           for (let item of comments) {
-            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
           }
         }
       }
@@ -123,20 +125,20 @@ class Comment {
       postIDs.push(result.postID)
     }
 
-    await CommentModel.remove({ '_id': { $in: comments }})
+    await CommentModel.remove({ '_id': { $in: comments } })
 
     for (let id of postIDs) {
       if (id) {
         let comments = await CommentModel.aggregate([
-          { $match: { state: 1, postID: id}},
-          { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+          { $match: { state: 1, postID: id } },
+          { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
         ])
 
         if (comments.length === 0) {
-          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 }})
+          await ArticleModel.update({ id: id }, { $set: { 'meta.comments': 0 } })
         } else {
           for (let item of comments) {
-            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+            await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
           }
         }
       }
@@ -155,9 +157,18 @@ class Comment {
     // TODO nginx反向代理, 通过
     // proxy_set_header X-Real-IP $remote_addr
     // 将客户端真实ip地址放到header的x-real-ip字段，然后直接从这个字段来取客户端的ip地址
+    const ip = (ctx.header['x-forwarded-for'] || ctx.header['x-real-ip'] || ctx.ip || ctx.ips[0])
 
-    // TODO GET评论ip，并根据ip解析出location
+    const ip_location = geoip.lookup(ip)
 
+    if (ip_location) {
+      comment.ip_location = {
+        city: ip_location.city,
+        range: ip_location.range,
+        country: ip_location.country
+      }
+    }
+    comment.ip = ip
     comment.likes = 0
     comment.isTop = false
     comment.agent = ctx.header['user-agent'] || comment.agent
@@ -168,16 +179,16 @@ class Comment {
     if (result.postID) {
       // 发表comment后更新article的meta.comments值
       let comments = await CommentModel.aggregate([
-        { $match: { state: 1, postID: result.postID}},
-        { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        { $match: { state: 1, postID: result.postID } },
+        { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
       ])
 
       for (let item of comments) {
-        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
       }
     }
 
-    ctx.status = 200,
+    ctx.status = 200
     ctx.body = {
       success: true,
       message: "评论发布成功",
@@ -217,15 +228,15 @@ class Comment {
     // 更新修改前的postID对应的meta.comments值
     if (before.postID) {
       let comments = await CommentModel.aggregate([
-        { $match: { state: 1, postID: before.postID}},
-        { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        { $match: { state: 1, postID: before.postID } },
+        { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
       ])
 
       if (comments.length === 0) {
-        await ArticleModel.update({ id: before.postID }, { $set: { 'meta.comments': 0 }})
+        await ArticleModel.update({ id: before.postID }, { $set: { 'meta.comments': 0 } })
       } else {
         for (let item of comments) {
-          await ArticleModel.update({id: item._id}, {$set: {'meta.comments': item.num_tutorial}})
+          await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
         }
       }
     }
@@ -233,12 +244,12 @@ class Comment {
     // 更新修改后的postID对应的meta.comments值
     if (result.postID) {
       let comments = await CommentModel.aggregate([
-        { $match: { state: 1, postID: result.postID}},
-        { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        { $match: { state: 1, postID: result.postID } },
+        { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
       ])
 
       for (let item of comments) {
-        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+        await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
       }
     }
 
@@ -254,7 +265,7 @@ class Comment {
     const id = ctx.params.id
 
     let isExist = await CommentModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
       ctx.status = 401,
@@ -269,15 +280,15 @@ class Comment {
 
     if (isExist.postID) {
       let comments = await CommentModel.aggregate([
-        { $match: { state: 1, postID: isExist.postID}},
-        { $group: { _id: "$postID", num_tutorial: { $sum : 1 }}}
+        { $match: { state: 1, postID: isExist.postID } },
+        { $group: { _id: "$postID", num_tutorial: { $sum: 1 } } }
       ])
 
       if (comments.length === 0) {
-        await ArticleModel.update({ id: isExist.postID }, { $set: { 'meta.comments': 0 }})
+        await ArticleModel.update({ id: isExist.postID }, { $set: { 'meta.comments': 0 } })
       } else {
         for (let item of comments) {
-          await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial }})
+          await ArticleModel.update({ id: item._id }, { $set: { 'meta.comments': item.num_tutorial } })
         }
       }
     }
