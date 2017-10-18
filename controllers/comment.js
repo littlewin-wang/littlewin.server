@@ -6,7 +6,40 @@
 const CommentModel = require('models/comment.model')
 const ArticleModel = require('models/article.model')
 
+const { sendMail } = require('utils/email')
+const marked = require('marked')
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+})
 const geoip = require('geoip-lite')
+
+// 邮件通知网站主及目标对象
+const sendMailToAdminAndReply = (comment, permalink) => {
+  const commentContent = marked(comment.content)
+  sendMail({
+    to: 'littlewin.wang@gmail.com',
+    subject: '博客有新的留言',
+    text: `来自 ${comment.author.name} 的留言：${comment.content}`,
+    html: `<p> 来自 ${comment.author.name} 的留言：${commentContent}</p><br><a href="${permalink}" target="_blank">[ 点击查看 ]</a>`
+  })
+  if (!!comment.pid) {
+    CommentModel.findOne({ id: comment.pid }).then(parentComment => {
+      sendMail({
+        to: parentComment.author.email,
+        subject: '你在littlewin.wang有新的评论回复',
+        text: `来自 ${comment.author.name} 的评论回复：${comment.content}`,
+        html: `<p> 来自${comment.author.name} 的评论回复：${commentContent}</p><br><a href="${permalink}" target="_blank">[ 点击查看 ]</a>`
+      })
+    })
+  }
+}
 
 class Comment {
   static async list (ctx) {
@@ -173,6 +206,9 @@ class Comment {
     comment.isTop = false
     comment.agent = ctx.header['user-agent'] || comment.agent
 
+    // 永久链接
+    const permalink = 'http://littlewin.wang/' + (Object.is(comment.postID, 0) ? 'guest' : `article/${comment.postID}`)
+
     // TODO 增加过滤机制
     let result = await new CommentModel(comment).save()
 
@@ -188,6 +224,7 @@ class Comment {
       }
     }
 
+    sendMailToAdminAndReply(comment, permalink)
     ctx.status = 200
     ctx.body = {
       success: true,
