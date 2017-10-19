@@ -5,7 +5,9 @@
 
 const CommentModel = require('models/comment.model')
 const ArticleModel = require('models/article.model')
+const SiteModel = require('models/site.model')
 
+const { akismetClient } = require('utils/akismet');
 const { sendMail } = require('utils/email')
 const marked = require('marked')
 marked.setOptions({
@@ -209,7 +211,41 @@ class Comment {
     // 永久链接
     const permalink = 'http://littlewin.wang/' + (Object.is(comment.postID, 0) ? 'guest' : `article/${comment.postID}`)
 
-    // TODO 增加过滤机制
+    // 使用akismet过滤
+    let akismetCheck = await akismetClient.checkSpam({
+      user_ip: comment.ip,
+      user_agent: comment.agent,
+      referrer: ctx.header.referer,
+      permalink,
+      comment_type: 'comment',
+      comment_author: comment.author.name,
+      comment_author_email: comment.author.email,
+      comment_author_url: comment.author.site,
+      comment_content: comment.content,
+      is_test: Object.is(process.env.NODE_ENV, 'development')
+    })
+
+    if (akismetCheck) {
+      ctx.status = 401
+      ctx.body = {
+        success: false,
+        message: "评论未通过akismet验证"
+      }
+      return
+    }
+
+    // 使用设置的黑名单过滤
+    let site = await SiteModel.findOne()
+    const { keywords, mails, ips } = site.blacklist
+    if (ips.includes(comment.ip) || mails.includes(comment.author.email) || (keywords.length && eval(`/${keywords.join('|')}/ig`).test(comment.content))) {
+      ctx.status = 401
+      ctx.body = {
+        success: false,
+        message: "IP或Email被ban || 评论内容不当"
+      }
+      return
+    }
+
     let result = await new CommentModel(comment).save()
 
     if (result.postID) {
@@ -305,11 +341,11 @@ class Comment {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
-        ctx.body = {
-          success: false,
-          message: "评论ID不存在"
-        }
+      ctx.status = 401
+      ctx.body = {
+        success: false,
+        message: "评论ID不存在"
+      }
       return
     }
 
