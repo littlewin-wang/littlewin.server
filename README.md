@@ -6,7 +6,7 @@ A restful blog backend server based on [koa](https://github.com/koajs/koa) + [mo
 
 ## 调试开发
 1. 开启Mongdb数据库
-2. 新建一个存放密码信息的文件至'~/key/littlewin-server' 参考[密码信息数据结构](https://github.com/littlewin-wang/littlewin.server/wiki/%E5%85%B3%E4%BA%8E'~-key-littlewin-server'%E4%B8%AD%E4%BF%9D%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+2. 新建一个存放密码信息的文件至'~/key/littlewin-server' 参考[密码信息数据结构](https://github.com/littlewin-wang/littlewin.server/wiki/%E5%AF%86%E9%92%A5%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6)
 
 ``` bash
 # install dependencies
