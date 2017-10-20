@@ -29,7 +29,7 @@ const SiteSchema = new Schema({
   site_icp: String,
 
   // 友链
-  links: [{ site: String, description: String }],
+  links: [{ title: String, site: String, description: String }],
 
   // 黑名单
   blacklist: {
