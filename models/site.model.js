@@ -8,10 +8,10 @@ const Schema = mongoose.Schema
 
 const SiteSchema = new Schema({
   // 网站标题
-  title:	{ type: String, required: true },
+  title: { type: String, required: true },
 
   // 网站副标题
-  sub_title:	{ type: String, required: true },
+  sub_title: { type: String, required: true },
 
   // 关键字
   keywords: [{ type: String }],
@@ -27,6 +27,9 @@ const SiteSchema = new Schema({
 
   // 备案号
   site_icp: String,
+
+  // 友链
+  links: [{ site: String, description: String }],
 
   // 黑名单
   blacklist: {
