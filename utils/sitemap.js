@@ -15,9 +15,8 @@ const createSiteMap = async () => {
   let site = await SiteModel.findOne({})
   let pages = [
     { url: '', changefreq: 'always', priority: 1 },
+    { url: '/simple', changefreq: 'always', priority: 1 },
     { url: '/about', changefreq: 'monthly', priority: 1 },
-    { url: '/github', changefreq: 'monthly', priority: 1 },
-    { url: '/sitemap', changefreq: 'always', priority: 1 },
     { url: '/guest', changefreq: 'always', priority: 1 }
   ]
 
