@@ -6,7 +6,7 @@
 const CategoryModel = require('models/category.model')
 const ArticleModel = require('models/article.model')
 
-const createSiteMap = require('utils/sitemap')
+// const createSiteMap = require('utils/sitemap')
 
 class Category {
   static async create (ctx) {
@@ -36,7 +36,7 @@ class Category {
         }
 
         // generate sitemap
-        createSiteMap()
+        // createSiteMap()
 
         // TODO push seo
       })
@@ -171,7 +171,7 @@ class Category {
           }
         }
         // generate sitemap
-        createSiteMap()
+        // createSiteMap()
 
         // TODO push seo
       }
@@ -210,7 +210,7 @@ class Category {
       message: "分类删除成功"
     }
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
   }
 }
 

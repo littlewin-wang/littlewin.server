@@ -55,7 +55,8 @@ const createSiteMap = async () => {
     })
   })
 
-  fs.writeFileSync("../littlewin.wang/static/sitemap.xml", sitemap.toString())
+  // fs.writeFileSync("../littlewin.wang/static/sitemap.xml", sitemap.toString())
+  return sitemap.toString()
 }
 
 module.exports = createSiteMap

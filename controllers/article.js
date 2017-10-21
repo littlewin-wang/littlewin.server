@@ -5,7 +5,7 @@
 
 const ArticleModel = require('models/article.model')
 
-const createSiteMap = require('utils/sitemap')
+// const createSiteMap = require('utils/sitemap')
 
 class Article {
   static async list (ctx) {
@@ -141,7 +141,7 @@ class Article {
       message: "文章批量删除成功",
     }
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
   }
 
   static async create (ctx) {
@@ -161,7 +161,7 @@ class Article {
         }
 
         // generate sitemap
-        createSiteMap()
+        // createSiteMap()
 
         // TODO push seo
       })
@@ -235,7 +235,7 @@ class Article {
       data: result
     }
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
 
     // TODO push seo
   }
@@ -263,7 +263,7 @@ class Article {
       message: "文章删除成功",
     }
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
   }
 }
 

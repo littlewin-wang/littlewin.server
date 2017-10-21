@@ -6,7 +6,7 @@
 const TagModel = require('models/tag.model')
 const ArticleModel = require('models/article.model')
 
-const createSiteMap = require('utils/sitemap')
+// const createSiteMap = require('utils/sitemap')
 
 class Tag {
   static async create (ctx) {
@@ -35,7 +35,7 @@ class Tag {
           message: "标签创建成功"
         }
         // generate sitemap
-        createSiteMap()
+        // createSiteMap()
 
         // TODO push seo
       })
@@ -124,7 +124,7 @@ class Tag {
       }
     }
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
   }
 
   static async get (ctx) {
@@ -190,7 +190,7 @@ class Tag {
           }
         }
         // generate sitemap
-        createSiteMap()
+        // createSiteMap()
 
         // TODO push seo
       }
@@ -222,7 +222,7 @@ class Tag {
     }
 
     // generate sitemap
-    createSiteMap()
+    // createSiteMap()
   }
 }
 

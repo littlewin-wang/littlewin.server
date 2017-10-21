@@ -5,13 +5,18 @@
 
 const fs = require('fs')
 
-require('utils/sitemap')()
+const createSiteMap = require('utils/sitemap')
 
 class SiteMap {
   static async get (ctx) {
+    let sitemap = await createSiteMap()
+
     ctx.status = 200
     ctx.set('Content-Type', 'application/xml')
-    ctx.body = fs.createReadStream('../littlewin.wang/static/sitemap.xml')
+    ctx.body = sitemap
+
+    // BUG 404
+    // ctx.body = fs.createReadStream('../littlewin.wang/static/sitemap.xml')
   }
 }
 
