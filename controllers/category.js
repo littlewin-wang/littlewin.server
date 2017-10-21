@@ -111,11 +111,11 @@ class Category {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
-        ctx.body = {
-          success: false,
-          message: "分类ID不存在"
-        }
+      ctx.status = 401
+      ctx.body = {
+        success: false,
+        message: "分类ID不存在"
+      }
     } else {
       ctx.status = 200
       ctx.body = {
