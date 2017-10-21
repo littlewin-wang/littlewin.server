@@ -12,6 +12,7 @@ const Comment = require('controllers/comment')
 const Qiniu = require('controllers/qiniu')
 const Github = require('controllers/github')
 const Site = require('controllers/site')
+const SiteMap = require('controllers/sitemap')
 const Like = require('controllers/like')
 const middleware = require('middlewares')
 
@@ -25,6 +26,9 @@ router
       guide: "https://github.com/littlewin-wang/littlewin.server/blob/master/README.md"
     }
   })
+
+  .get('/sitemap.xml', SiteMap.get)
+
   .post('/user', User.login)
   .get('/user', User.get)
   .put('/user', middleware.verifyToken, User.modify)

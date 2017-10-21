@@ -6,6 +6,8 @@
 const TagModel = require('models/tag.model')
 const ArticleModel = require('models/article.model')
 
+const createSiteMap = require('utils/sitemap')
+
 class Tag {
   static async create (ctx) {
     const tag = ctx.request.body
@@ -31,8 +33,11 @@ class Tag {
         ctx.body = {
           success: true,
           message: "标签创建成功"
-          // TODO sitemap && SEO
         }
+        // generate sitemap
+        createSiteMap()
+
+        // TODO push seo
       })
       .catch(() => {
         ctx.throw(401, '标签创建失败')
@@ -66,10 +71,12 @@ class Tag {
 
     let counts = await ArticleModel.aggregate([
       { $match },
-      { $unwind : "$tag" },
-      { $group: {
-        _id: "$tag",
-        num_tutorial: { $sum : 1 }}
+      { $unwind: "$tag" },
+      {
+        $group: {
+          _id: "$tag",
+          num_tutorial: { $sum: 1 }
+        }
       }
     ])
 
@@ -106,9 +113,9 @@ class Tag {
       return
     }
 
-    let result = await TagModel.remove({ '_id': { $in: tags }})
+    let result = await TagModel.remove({ '_id': { $in: tags } })
 
-    ctx.status = 200,
+    ctx.status = 200
     ctx.body = {
       success: true,
       message: "标签批量删除成功",
@@ -116,6 +123,8 @@ class Tag {
         result
       }
     }
+    // generate sitemap
+    createSiteMap()
   }
 
   static async get (ctx) {
@@ -123,16 +132,16 @@ class Tag {
 
     // name validate
     let isExist = await TagModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
+      ctx.status = 401
       ctx.body = {
         success: false,
         message: "标签ID不存在"
       }
     } else {
-      ctx.status = 200,
+      ctx.status = 200
       ctx.body = {
         success: true,
         message: "标签获取成功",
@@ -155,10 +164,10 @@ class Tag {
 
     // if new category's name duplicated
     const isExist = await TagModel
-      .findOne({name: tag.name})
+      .findOne({ name: tag.name })
 
     if (isExist && String(isExist._id) !== id) {
-      ctx.status = 401,
+      ctx.status = 401
       ctx.body = {
         success: false,
         message: "标签已存在",
@@ -172,7 +181,7 @@ class Tag {
       if (!tagItem) {
         ctx.throw(401, '标签ID不存在')
       } else {
-        ctx.status = 200,
+        ctx.status = 200
         ctx.body = {
           success: true,
           message: "标签更新成功",
@@ -180,7 +189,10 @@ class Tag {
             tag: tagItem
           }
         }
-        // TODO sitemap && SEO
+        // generate sitemap
+        createSiteMap()
+
+        // TODO push seo
       }
     }
   }
@@ -190,10 +202,10 @@ class Tag {
 
     // name validate
     let isExist = await TagModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
+      ctx.status = 401
       ctx.body = {
         success: false,
         message: "标签ID不存在"
@@ -201,13 +213,16 @@ class Tag {
       return
     }
 
-    await TagModel.remove({_id: id})
+    await TagModel.remove({ _id: id })
 
-    ctx.status = 200,
+    ctx.status = 200
     ctx.body = {
       success: true,
       message: "标签删除成功"
     }
+
+    // generate sitemap
+    createSiteMap()
   }
 }
 

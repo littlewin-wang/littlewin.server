@@ -6,6 +6,8 @@
 const CategoryModel = require('models/category.model')
 const ArticleModel = require('models/article.model')
 
+const createSiteMap = require('utils/sitemap')
+
 class Category {
   static async create (ctx) {
     const category = ctx.request.body
@@ -31,8 +33,12 @@ class Category {
         ctx.body = {
           success: true,
           message: "分类创建成功"
-          // TODO sitemap && SEO
         }
+
+        // generate sitemap
+        createSiteMap()
+
+        // TODO push seo
       })
       .catch(() => {
         ctx.throw(401, '分类创建失败')
@@ -66,10 +72,12 @@ class Category {
 
     let counts = await ArticleModel.aggregate([
       { $match },
-      { $unwind : "$category" },
-      { $group: {
-        _id: "$category",
-        num_tutorial: { $sum : 1 }}
+      { $unwind: "$category" },
+      {
+        $group: {
+          _id: "$category",
+          num_tutorial: { $sum: 1 }
+        }
       }
     ])
 
@@ -100,16 +108,16 @@ class Category {
 
     // name validate
     let isExist = await CategoryModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
       ctx.status = 401,
-      ctx.body = {
-        success: false,
-        message: "分类ID不存在"
-      }
+        ctx.body = {
+          success: false,
+          message: "分类ID不存在"
+        }
     } else {
-      ctx.status = 200,
+      ctx.status = 200
       ctx.body = {
         success: true,
         message: "分类获取成功",
@@ -132,17 +140,17 @@ class Category {
 
     // if new category's name duplicated
     const isExist = await CategoryModel
-      .findOne({name: category.name})
+      .findOne({ name: category.name })
 
     if (isExist && String(isExist._id) !== id) {
       ctx.status = 401,
-      ctx.body = {
-        success: false,
-        message: "分类名已存在",
-        data: {
-          category: isExist
+        ctx.body = {
+          success: false,
+          message: "分类名已存在",
+          data: {
+            category: isExist
+          }
         }
-      }
     } else {
       let pid = category.super
       if (['', '0', 'null', 'false'].includes(pid) || !pid || Object.is(pid, id)) {
@@ -154,7 +162,7 @@ class Category {
       if (!cate) {
         ctx.throw(401, '该分类ID不存在')
       } else {
-        ctx.status = 200,
+        ctx.status = 200
         ctx.body = {
           success: true,
           message: "分类更新成功",
@@ -162,7 +170,10 @@ class Category {
             category: cate
           }
         }
-        // TODO sitemap && SEO
+        // generate sitemap
+        createSiteMap()
+
+        // TODO push seo
       }
     }
   }
@@ -172,10 +183,10 @@ class Category {
 
     // name validate
     let isExist = await CategoryModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
+      ctx.status = 401
       ctx.body = {
         success: false,
         message: "分类ID不存在"
@@ -188,16 +199,18 @@ class Category {
 
     if (result.length) {
       // 更新子项的super
-      await CategoryModel.find({ '_id': { $in: Array.from(result, c => c._id) } }).update({ $set: { super: isExist.super || null }})
+      await CategoryModel.find({ '_id': { $in: Array.from(result, c => c._id) } }).update({ $set: { super: isExist.super || null } })
     }
 
-    await CategoryModel.remove({_id: id})
+    await CategoryModel.remove({ _id: id })
 
-    ctx.status = 200,
+    ctx.status = 200
     ctx.body = {
       success: true,
       message: "分类删除成功"
     }
+    // generate sitemap
+    createSiteMap()
   }
 }
 

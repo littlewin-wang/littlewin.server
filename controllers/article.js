@@ -5,12 +5,14 @@
 
 const ArticleModel = require('models/article.model')
 
+const createSiteMap = require('utils/sitemap')
+
 class Article {
   static async list (ctx) {
     let { page, per_page, state, pub, keyword, category, tag, date, hot } = ctx.query
 
     // filter options
-    const options ={
+    const options = {
       sort: { createAt: -1 },
       page: Number(page || 1),
       limit: Number(per_page || 10),
@@ -62,7 +64,7 @@ class Article {
     // 时间查询
     if (date) {
       const getDate = new Date(date);
-      if(!Object.is(getDate.toString(), 'Invalid Date')) {
+      if (!Object.is(getDate.toString(), 'Invalid Date')) {
         querys.create_at = {
           "$gte": new Date((getDate / 1000 - 60 * 60 * 8) * 1000),
           "$lt": new Date((getDate / 1000 + 60 * 60 * 16) * 1000)
@@ -111,7 +113,7 @@ class Article {
         break
     }
 
-    let result = await ArticleModel.update({ '_id': { $in: articles }}, { $set: updatePart }, { multi: true })
+    let result = await ArticleModel.update({ '_id': { $in: articles } }, { $set: updatePart }, { multi: true })
     ctx.status = 200
     ctx.body = {
       success: true,
@@ -131,15 +133,15 @@ class Article {
 
     // TODO SEO delete
 
-    await ArticleModel.remove({ '_id': { $in: articles }})
-
-    // TODO update sitemap
+    await ArticleModel.remove({ '_id': { $in: articles } })
 
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "文章批量删除成功",
     }
+    // generate sitemap
+    createSiteMap()
   }
 
   static async create (ctx) {
@@ -156,8 +158,12 @@ class Article {
         ctx.body = {
           success: true,
           message: "创建文章成功"
-          // TODO sitemap && SEO
         }
+
+        // generate sitemap
+        createSiteMap()
+
+        // TODO push seo
       })
       .catch(() => {
         ctx.throw(401, '创建文章失败')
@@ -192,7 +198,7 @@ class Article {
     let newResult = result.toObject()
     // 按照tag请求相似文章
     if (!isFindById && result.tag.length) {
-      let related = await ArticleModel.find({ state: 1, pub: 1, tag: { $in: result.tag.map(t => t._id) }})
+      let related = await ArticleModel.find({ state: 1, pub: 1, tag: { $in: result.tag.map(t => t._id) } })
       newResult.related = related
     }
 
@@ -221,23 +227,27 @@ class Article {
     delete article.updateAt
 
     let result = await ArticleModel.findByIdAndUpdate(id, article, { new: true })
-    // TODO sitemap && SEO
+
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "文章修改成功",
       data: result
     }
+    // generate sitemap
+    createSiteMap()
+
+    // TODO push seo
   }
 
   static async delete (ctx) {
     const id = ctx.params.id
 
     let isExist = await ArticleModel
-      .findOne({_id: id})
+      .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401,
+      ctx.status = 401
       ctx.body = {
         success: false,
         message: "文章ID不存在"
@@ -246,12 +256,14 @@ class Article {
     }
 
     await ArticleModel.findByIdAndRemove(id)
-    // TODO sitemap && SEO
+
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "文章删除成功",
     }
+    // generate sitemap
+    createSiteMap()
   }
 }
 
