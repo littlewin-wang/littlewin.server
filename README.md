@@ -145,6 +145,74 @@ $ pm2 start ecosystem.config.js
 ```
 
 ## 接口设计
+#### 接口数据结构
+- HTTP状态码
+  * 401 权限不足或其他数据错误
+  * 404 项目中不存在
+  * 500 服务器挂了
+  * 200 正常
+
+- 数据特征码
+  * success:
+    * true
+    * false
+  * message:
+    具体信息
+  * data:
+    具体数据
+    
+#### 接口列表
+```
+.get('/', (ctx) => {
+    ctx.body = {
+      title: "littlewin.server API",
+      version: "v1",
+      author: "littlewin.wang@gmail.com",
+      site: "littlewin.wang",
+      guide: "https://github.com/littlewin-wang/littlewin.server/blob/master/README.md"
+    }
+  })    // 获取API接口信息
+
+  .get('/sitemap.xml', SiteMap.get)    // 获取sitemap信息
+
+  .post('/user', User.login)    // 用户登录
+  .get('/user', User.get)    // 获取用户信息
+  .put('/user', middleware.verifyToken, User.modify)    // 更新用户信息
+
+  .post('/category', middleware.verifyToken, Category.create)    // 新建分类
+  .get('/category', Category.list)    // 获取分类列表
+  .get('/category/:id', Category.get)    // 获取单个分类信息
+  .put('/category/:id', middleware.verifyToken, Category.modify)    // 更新单个分类信息
+  .delete('/category/:id', middleware.verifyToken, Category.delete)    // 删除单个分类
+
+  .post('/tag', middleware.verifyToken, Tag.create)    // 新建标签
+  .get('/tag', Tag.list)    // 获取标签列表
+  .delete('/tag', middleware.verifyToken, Tag.deleteList)    // 批量删除标签
+  .get('/tag/:id', Tag.get)    // 获取单个标签信息
+  .put('/tag/:id', middleware.verifyToken, Tag.modify)    // 更新单个标签信息
+  .delete('/tag/:id', middleware.verifyToken, Tag.delete)    // 删除单个标签
+  
+  .post('/article', middleware.verifyToken, Article.create)    // 新建文章
+  .get('/article', Article.list)    // 获取文章列表
+  .patch('/article', middleware.verifyToken, Article.patch)    // 批量更新文章
+  .delete('/article', middleware.verifyToken, Article.deleteList)    // 批量删除文章
+  .get('/article/:id', Article.get)    // 获取单个文章信息
+  .put('/article/:id', middleware.verifyToken, Article.modify)    // 更新单个文章信息
+  .delete('/article/:id', middleware.verifyToken, Article.delete)    // 删除单个文章
+  
+  .post('/comment', Comment.create)    // 新建评论
+  .get('/comment', Comment.list)    // 获取评论列表
+  .patch('/comment', middleware.verifyToken, Comment.patch)    // 批量更新评论状态
+  .delete('/comment', middleware.verifyToken, Comment.deleteList)    // 批量删除评论
+  .get('/comment/:id', Comment.get)    // 获取单个评论信息
+  .put('/comment/:id', middleware.verifyToken, Comment.modify)    // 更新单个评论信息
+  .delete('/comment/:id', middleware.verifyToken, Comment.delete)    // 删除单个评论
+  
+  .post('/like', Like.like)    // 点赞
+
+  .get('/site', Site.get)    // 获取站点信息
+  .put('/site', middleware.verifyToken, Site.modify)    // 更新站点信息
+```
 
 ## Feature list
  - [x] 文章/分类/标签/评论等 数据模型设计
