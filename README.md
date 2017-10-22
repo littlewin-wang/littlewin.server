@@ -21,6 +21,128 @@ $ pm2 start ecosystem.config.js
 ```
 
 ## 数据模型设计
+#### 文章模型
+```
+{
+  title: { type: String, required: true, validate: /\S+/ },    // 文章标题
+  keywords: [{ type: String }],    // 文章关键词
+  description: String,     // 描述
+  content: { type: String, required: true, validate: /\S+/ },    // 文章内容
+  thumb: String,    // 缩略图
+  state: { type: Number, default: 1 },    // 文章发布状态 => -1回收站，0草稿，1已发布
+  pub: { type: Number, default: 1 },    // 文章公开状态 = // -1私密，0需要密码，1公开
+  password: { type: String, default: '' },    // 文章密码 => 加密状态生效
+  tag: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],    // 文章标签
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },    // 文章分类
+  meta: {
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+    comments: { type: Number, default: 0 }
+  },    // 其他元信息
+  createAt: { type: Date, default: Date.now },    // 创建时间
+  updateAt: { type: Date },    // 修改时间
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]    // 扩展属性
+})
+```
+
+#### 分类模型 
+```
+{
+  name: { type: String, required: true, validate: /\S+/ },    // 分类名称 
+  description: String,    // 描述
+  super: { type: Schema.Types.ObjectId, ref: 'Category' },    // 父分类
+  createAt: { type: Date, default: Date.now },    // 创建时间
+  updateAt: { type: Date },    // 修改时间
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]     // 扩展属性
+}
+```
+
+#### 标签模型
+```
+{
+  name: { type: String, required: true, validate: /\S+/ },    // 标签名称
+  description: String,    // 描述
+  createAt: { type: Date, default: Date.now },    // 创建时间
+  updateAt: { type: Date },    // 修改时间
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]    // 扩展属性
+}
+```
+
+#### 评论模型
+```
+{
+  thirdID: { type: Number },    // 第三方评论id
+  postID: { type: Number, required: true },    // 评论所在文章id， 0代表系统留言板
+  pid: { type: Number, default: 0 },    // pid, 0代表默认留言
+  content: { type: String, required: true, validate: /\S+/ },    // content
+  isTop: { type: Boolean, default: false },    // 是否置顶
+  likes: { type: Number, default: 0 },    // 点赞数
+  author: {
+    name: { type: String, required: true, validate: /\S+/ },
+    email: { type: String, required: true, validate: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/ },
+    site: { type: String, validate: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/ }
+  },    // 评论产生者
+  ip: { type: String },    // IP地址
+  ip_location: { type: Object },    // ip物理地址
+  agent: { type: String, validate: /\S+/ },    // 用户ua
+  state: { type: Number, default: 1 },    // 状态 0待审核/1通过正常/-1已删除/-2垃圾评论
+  createAt: { type: Date, default: Date.now },    // 创建时间
+  updateAt: { type: Date },    // 修改时间
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]    // 扩展属性
+}
+```
+
+#### 用户模型
+```
+{
+  username: { type: String, default: '' },    // 用户名
+  password: {
+    type: String,
+    default: md5(config.AUTH.default.password)
+  },    // 密码
+  slogan: { type: String, default: '' },    // 签名
+  gravatar: { type: String, default: '' },    // 头像
+  extends: [{
+    name: { type: String, validate: /\S+/ },
+    value: { type: String, validate: /\S+/ }
+  }]    // 扩展属性
+}
+```
+
+#### 站点信息模型
+```
+{
+  title: { type: String, required: true },    // 网站标题
+  sub_title: { type: String, required: true },    // 网站副标题
+  keywords: [{ type: String }],    // 关键字
+  description: String,    // 网站描述
+  site_url: { type: String, required: true },    // 站点地址
+  site_email: String,    // 网站官邮
+  site_icp: String,    // 备案号
+  links: [{ title: String, site: String, description: String }],    // 友链
+  blacklist: {
+    ips: [{ type: String, validate: /\S+/ }],
+    mails: [{ type: String, validate: /\S+/ }],
+    keywords: [{ type: String, validate: /\S+/ }]
+  },    // 黑名单
+  meta: {
+    // 被喜欢次数
+    likes: { type: Number, default: 0 }
+  }    // 其他元信息
+}
+```
 
 ## 接口设计
 
