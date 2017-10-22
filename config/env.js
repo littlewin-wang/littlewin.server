@@ -12,11 +12,19 @@
  */
 
 // TODO 密钥信息存放在加密数据库
-let { AUTH, QINIU, EMAIL, AKISMET } = require(process.env.HOME.concat('/key/littlewin-server'))
+let { AUTH, QINIU, EMAIL, AKISMET, BAIDU } = require(process.env.HOME.concat('/key/littlewin-server'))
 
 const APP = {
   ROOT_PATH: __dirname,
   LIMIT: 16
+}
+
+const INFO = {
+  title: 'littlewin.server',
+  version: '1.0.0',
+  author: 'littlewin',
+  site: 'http://littlewin.wang',
+  with: ['Node.js', 'MongoDB', 'Koa2', 'Nginx']
 }
 
 const GITHUB = {
@@ -35,11 +43,13 @@ module.exports = {
   development: {
     AUTH,
     APP,
+    INFO,
     QINIU,
     GITHUB,
     session,
     EMAIL,
     AKISMET,
+    BAIDU,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-dev'
     },
@@ -50,11 +60,13 @@ module.exports = {
   production: {
     AUTH,
     APP,
+    INFO,
     QINIU,
     GITHUB,
     session,
     EMAIL,
     AKISMET,
+    BAIDU,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-prd'
     },

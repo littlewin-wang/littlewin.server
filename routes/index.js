@@ -3,6 +3,7 @@
  * @author littlewin(littlewin.wang@gmail.com)
  */
 
+const config = require('config/env')[process.env.NODE_ENV || 'development']
 const router = require('koa-router')()
 const User = require('controllers/user')
 const Category = require('controllers/category')

@@ -6,7 +6,9 @@
 const CategoryModel = require('models/category.model')
 const ArticleModel = require('models/article.model')
 
+const config = require('config/env')[process.env.NODE_ENV || 'development']
 // const createSiteMap = require('utils/sitemap')
+const { baiduSeoPush, baiduSeoUpdate } = require('utils/baidu_seo_push')
 
 class Category {
   static async create (ctx) {
@@ -38,7 +40,8 @@ class Category {
         // generate sitemap
         // createSiteMap()
 
-        // TODO push seo
+        // baidu seo push
+        baiduSeoPush(`${config.INFO.site}/category/${category.name}`)
       })
       .catch(() => {
         ctx.throw(401, '分类创建失败')
@@ -173,7 +176,8 @@ class Category {
         // generate sitemap
         // createSiteMap()
 
-        // TODO push seo
+        // baidu seo update
+        baiduSeoUpdate(`${config.INFO.site}/category/${cate.name}`)
       }
     }
   }

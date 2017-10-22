@@ -5,7 +5,9 @@
 
 const ArticleModel = require('models/article.model')
 
+const config = require('config/env')[process.env.NODE_ENV || 'development']
 // const createSiteMap = require('utils/sitemap')
+const { baiduSeoPush, baiduSeoUpdate } = require('utils/baidu_seo_push')
 
 class Article {
   static async list (ctx) {
@@ -131,8 +133,6 @@ class Article {
       return
     }
 
-    // TODO SEO delete
-
     await ArticleModel.remove({ '_id': { $in: articles } })
 
     ctx.status = 200
@@ -153,7 +153,7 @@ class Article {
     }
 
     await new ArticleModel(article).save()
-      .then(() => {
+      .then((result) => {
         ctx.status = 200
         ctx.body = {
           success: true,
@@ -163,7 +163,8 @@ class Article {
         // generate sitemap
         // createSiteMap()
 
-        // TODO push seo
+        // baidu seo push
+        baiduSeoPush(`${config.INFO.site}/article/${result.id}`)
       })
       .catch(() => {
         ctx.throw(401, '创建文章失败')
@@ -237,7 +238,8 @@ class Article {
     // generate sitemap
     // createSiteMap()
 
-    // TODO push seo
+    // baidu seo update
+    baiduSeoUpdate(`${config.INFO.site}/article/${result.id}`)
   }
 
   static async delete (ctx) {

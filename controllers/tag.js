@@ -6,7 +6,9 @@
 const TagModel = require('models/tag.model')
 const ArticleModel = require('models/article.model')
 
+const config = require('config/env')[process.env.NODE_ENV || 'development']
 // const createSiteMap = require('utils/sitemap')
+const { baiduSeoPush, baiduSeoUpdate } = require('utils/baidu_seo_push')
 
 class Tag {
   static async create (ctx) {
@@ -37,7 +39,8 @@ class Tag {
         // generate sitemap
         // createSiteMap()
 
-        // TODO push seo
+        // baidu seo push
+        baiduSeoPush(`${config.INFO.site}/tag/${tag.name}`)
       })
       .catch(() => {
         ctx.throw(401, '标签创建失败')
@@ -192,7 +195,8 @@ class Tag {
         // generate sitemap
         // createSiteMap()
 
-        // TODO push seo
+        // baidu seo update
+        baiduSeoUpdate(`${config.INFO.site}/tag/${tagItem.name}`)
       }
     }
   }
