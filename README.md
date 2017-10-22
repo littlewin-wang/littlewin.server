@@ -225,9 +225,7 @@ $ pm2 start ecosystem.config.js
  - [x] 生成SITEMAP
  - [x] 自动push新链到百度
  - [x] 启用redis
- - [ ] 自动PUSH RSS
  - [ ] 启用SSL
- - [ ] redis启用
 
 ## Contact
 Email: [littlewin.wang@gmail.com](mailto:littlewin.wang@gmail.com)
