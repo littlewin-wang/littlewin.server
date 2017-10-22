@@ -33,7 +33,7 @@ $ pm2 start ecosystem.config.js
  - [x] 增加评论邮件提醒功能
  - [x] 根据IP解析地址
  - [x] 生成SITEMAP
- - [x] 自动push新的链接到百度
+ - [x] 自动push新链到百度
  - [ ] 自动PUSH RSS
  - [ ] 启用SSL
  - [ ] redis启用
