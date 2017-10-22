@@ -224,6 +224,7 @@ $ pm2 start ecosystem.config.js
  - [x] 根据IP解析地址
  - [x] 生成SITEMAP
  - [x] 自动push新链到百度
+ - [x] 启用redis
  - [ ] 自动PUSH RSS
  - [ ] 启用SSL
  - [ ] redis启用
