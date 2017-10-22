@@ -10,13 +10,15 @@ const logger = require('koa-logger')
 
 const mongodb = require('db/mongodb')
 const mongoosePaginate = require('mongoose-paginate')
+const redis = require('db/redis')
 
-const config = require('config/env')[process.env.NODE_ENV||'development']
+const config = require('config/env')[process.env.NODE_ENV || 'development']
 const middleware = require('middlewares')
-const router  = require('./routes')
+const router = require('./routes')
 
 // data server
 mongodb.connect()
+redis.connect()
 
 // global options
 mongoosePaginate.paginate.options = {
@@ -31,7 +33,7 @@ app.use(cors({
 
 // middleware
 app.use(convert(logger()))
-   .use(bodyparser)
+  .use(bodyparser)
 
 // logger
 app.use(async (ctx, next) => {
