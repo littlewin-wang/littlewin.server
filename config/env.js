@@ -5,6 +5,7 @@
  * @AUTH 默认账户
  * @mongo && port  数据库连接配置
  * @QINIU 七牛密钥
+ * @QCLOUD 腾讯云相关信息
  * @GITHUB github账号
  *
  * @development 开发环境配置
@@ -12,7 +13,7 @@
  */
 
 // TODO 密钥信息存放在加密数据库
-let { AUTH, QINIU, EMAIL, AKISMET, BAIDU } = require(process.env.HOME.concat('/key/littlewin-server'))
+let { AUTH, QINIU, QCLOUD, EMAIL, AKISMET, BAIDU } = require(process.env.HOME.concat('/key/littlewin-server'))
 
 const APP = {
   ROOT_PATH: __dirname,
@@ -45,6 +46,7 @@ module.exports = {
     APP,
     INFO,
     QINIU,
+    QCLOUD,
     GITHUB,
     session,
     EMAIL,
@@ -62,6 +64,7 @@ module.exports = {
     APP,
     INFO,
     QINIU,
+    QCLOUD,
     GITHUB,
     session,
     EMAIL,

@@ -11,6 +11,7 @@ const Tag = require('controllers/tag')
 const Article = require('controllers/article')
 const Comment = require('controllers/comment')
 const Qiniu = require('controllers/qiniu')
+const Qcloud = require('controllers/qcloud')
 const Github = require('controllers/github')
 const Site = require('controllers/site')
 const SiteMap = require('controllers/sitemap')
@@ -66,7 +67,8 @@ router
   .get('/site', Site.get)
   .put('/site', middleware.verifyToken, Site.modify)
 
-  .get('/qiniu', Qiniu.getToken)
+  .get('/qiniu', middleware.verifyToken, Qiniu.getToken)
+  .get('/qcloud', middleware.verifyToken, Qcloud.getQcloud)
   .get('/github', Github.list)
 
   .post('/like', Like.like)
