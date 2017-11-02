@@ -12,11 +12,6 @@ class Server {
     let cpuUsage = await cpu.usage()
     let cpuAverage = await cpu.average()
 
-    // drive stat
-    let drive = osu.drive
-    let driveInfo = await drive.info()
-    let driveFree = await drive.free()
-
     // mem stat
     let mem = osu.mem
     let memInfo = await mem.info()
@@ -29,9 +24,6 @@ class Server {
         cpu: {
           cpuUsage,
           cpuAverage
-        },
-        drive: {
-          driveInfo
         },
         mem: {
           memInfo
