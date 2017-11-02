@@ -14,6 +14,7 @@ const Qiniu = require('controllers/qiniu')
 const Qcloud = require('controllers/qcloud')
 const Github = require('controllers/github')
 const Site = require('controllers/site')
+const Server = require('controllers/server')
 const SiteMap = require('controllers/sitemap')
 const Like = require('controllers/like')
 const middleware = require('middlewares')
@@ -66,6 +67,8 @@ router
 
   .get('/site', Site.get)
   .put('/site', middleware.verifyToken, Site.modify)
+
+  .get('/server', Server.getServer)
 
   .get('/qiniu', middleware.verifyToken, Qiniu.getToken)
   .get('/qcloud', middleware.verifyToken, Qcloud.getQcloud)
