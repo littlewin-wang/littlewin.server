@@ -61,7 +61,7 @@ class Site {
 
     // event system push
     new EventModel({
-      person: 'Admin',
+      person: 'ADMIN',
       action: !!_id ? 'MODIFY' : 'NEW',
       target: {
         type: 'SITE',

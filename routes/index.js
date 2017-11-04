@@ -79,7 +79,7 @@ router
 
   .get('/event', Event.list)
   .get('/event/:id', Event.get)
-  .delete('/event', Event.deleteList)
-  .delete('/event/:id', Event.delete)
+  .delete('/event', middleware.verifyToken, Event.deleteList)
+  .delete('/event/:id', middleware.verifyToken, Event.delete)
 
 module.exports = router
