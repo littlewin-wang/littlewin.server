@@ -5,6 +5,7 @@
 
 const TagModel = require('models/tag.model')
 const ArticleModel = require('models/article.model')
+const EventModel = require('models/event.model')
 
 const config = require('config/env')[process.env.NODE_ENV || 'development']
 // const createSiteMap = require('utils/sitemap')
@@ -16,12 +17,12 @@ class Tag {
 
     // name validate
     if (!tag.name) {
-      ctx.throw(401, '标签名为空')
+      ctx.throw(400, '标签名为空')
       return
     }
 
     if (await TagModel.findOne({ name: tag.name }).exec()) {
-      ctx.status = 401
+      ctx.status = 400
       ctx.body = {
         success: false,
         message: "标签已存在"
@@ -36,6 +37,16 @@ class Tag {
           success: true,
           message: "标签创建成功"
         }
+
+        // event system push
+        new EventModel({
+          person: 'ADMIN',
+          action: 'NEW',
+          target: {
+            type: 'TAG',
+            data: tag
+          }
+        }).save()
         // generate sitemap
         // createSiteMap()
 
@@ -43,7 +54,7 @@ class Tag {
         baiduSeoPush(`${config.INFO.site}/tag/${tag.name}`)
       })
       .catch(() => {
-        ctx.throw(401, '标签创建失败')
+        ctx.throw(400, '标签创建失败')
       })
   }
 
@@ -112,7 +123,7 @@ class Tag {
     const { tags } = ctx.request.body
 
     if (!tags || !tags.length) {
-      ctx.throw(401, '缺少有效参数')
+      ctx.throw(400, '缺少有效参数')
       return
     }
 
@@ -126,8 +137,19 @@ class Tag {
         result
       }
     }
+
     // generate sitemap
     // createSiteMap()
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'DELETELIST',
+      target: {
+        type: 'TAG',
+        data: tags
+      }
+    }).save()
   }
 
   static async get (ctx) {
@@ -138,7 +160,7 @@ class Tag {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = {
         success: false,
         message: "标签ID不存在"
@@ -161,7 +183,7 @@ class Tag {
 
     // name validate
     if (!tag.name) {
-      ctx.throw(401, '标签名为空')
+      ctx.throw(400, '标签名为空')
       return
     }
 
@@ -170,7 +192,7 @@ class Tag {
       .findOne({ name: tag.name })
 
     if (isExist && String(isExist._id) !== id) {
-      ctx.status = 401
+      ctx.status = 400
       ctx.body = {
         success: false,
         message: "标签已存在",
@@ -182,7 +204,7 @@ class Tag {
       let tagItem = await TagModel.findByIdAndUpdate(id, tag, { new: true })
 
       if (!tagItem) {
-        ctx.throw(401, '标签ID不存在')
+        ctx.throw(404, '标签ID不存在')
       } else {
         ctx.status = 200
         ctx.body = {
@@ -197,6 +219,16 @@ class Tag {
 
         // baidu seo update
         baiduSeoUpdate(`${config.INFO.site}/tag/${tagItem.name}`)
+
+        // event system push
+        new EventModel({
+          person: 'ADMIN',
+          action: 'MODIFY',
+          target: {
+            type: 'TAG',
+            data: tagItem
+          }
+        }).save()
       }
     }
   }
@@ -209,7 +241,7 @@ class Tag {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = {
         success: false,
         message: "标签ID不存在"
@@ -227,6 +259,16 @@ class Tag {
 
     // generate sitemap
     // createSiteMap()
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'DELETE',
+      target: {
+        type: 'TAG',
+        data: isExist
+      }
+    }).save()
   }
 }
 

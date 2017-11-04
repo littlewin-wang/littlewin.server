@@ -5,6 +5,7 @@
 
 const CategoryModel = require('models/category.model')
 const ArticleModel = require('models/article.model')
+const EventModel = require('models/event.model')
 
 const config = require('config/env')[process.env.NODE_ENV || 'development']
 // const createSiteMap = require('utils/sitemap')
@@ -16,12 +17,12 @@ class Category {
 
     // name validate
     if (!category.name) {
-      ctx.throw(401, '需要提供分类名')
+      ctx.throw(400, '需要提供分类名')
       return
     }
 
     if (await CategoryModel.findOne({ name: category.name }).exec()) {
-      ctx.status = 401
+      ctx.status = 400
       ctx.body = {
         success: false,
         message: "分类已存在"
@@ -42,9 +43,19 @@ class Category {
 
         // baidu seo push
         baiduSeoPush(`${config.INFO.site}/category/${category.name}`)
+
+        // event system push
+        new EventModel({
+          person: 'ADMIN',
+          action: 'NEW',
+          target: {
+            type: 'CATEGORY',
+            data: category
+          }
+        }).save()
       })
       .catch(() => {
-        ctx.throw(401, '分类创建失败')
+        ctx.throw(400, '分类创建失败')
       })
   }
 
@@ -114,7 +125,7 @@ class Category {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = {
         success: false,
         message: "分类ID不存在"
@@ -137,7 +148,7 @@ class Category {
 
     // name validate
     if (!category.name) {
-      ctx.throw(401, '需要提供分类名')
+      ctx.throw(400, '需要提供分类名')
       return
     }
 
@@ -163,7 +174,7 @@ class Category {
       let cate = await CategoryModel.findByIdAndUpdate(id, category, { new: true })
 
       if (!cate) {
-        ctx.throw(401, '该分类ID不存在')
+        ctx.throw(404, '该分类ID不存在')
       } else {
         ctx.status = 200
         ctx.body = {
@@ -178,6 +189,16 @@ class Category {
 
         // baidu seo update
         baiduSeoUpdate(`${config.INFO.site}/category/${cate.name}`)
+
+        // event system push
+        new EventModel({
+          person: 'ADMIN',
+          action: 'MODIFY',
+          target: {
+            type: 'CATEGORY',
+            data: cate
+          }
+        }).save()
       }
     }
   }
@@ -190,7 +211,7 @@ class Category {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = {
         success: false,
         message: "分类ID不存在"
@@ -215,6 +236,16 @@ class Category {
     }
     // generate sitemap
     // createSiteMap()
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'DELETE',
+      target: {
+        type: 'CATEGORY',
+        data: isExist
+      }
+    }).save()
   }
 }
 

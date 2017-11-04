@@ -17,6 +17,7 @@ const Site = require('controllers/site')
 const Server = require('controllers/server')
 const SiteMap = require('controllers/sitemap')
 const Like = require('controllers/like')
+const Event = require('controllers/event')
 const middleware = require('middlewares')
 
 router
@@ -75,5 +76,10 @@ router
   .get('/github', Github.list)
 
   .post('/like', Like.like)
+
+  .get('/event', Event.list)
+  .get('/event/:id', Event.get)
+  .delete('/event', Event.deleteList)
+  .delete('/event/:id', Event.delete)
 
 module.exports = router

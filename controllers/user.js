@@ -69,11 +69,11 @@ class User {
     if (!!new_password && !!new_password_ag) {
       // 验证密码
       if (!!password && ((!new_password || !new_password_ag) || !Object.is(new_password, new_password_ag))) {
-        ctx.throw(401, "密码不一致或无效")
+        ctx.throw(400, "密码不一致或无效")
       }
 
       if (!!password && [new_password, new_password_ag].includes(password)) {
-        ctx.throw(401, "新旧密码不可一致")
+        ctx.throw(400, "新旧密码不可一致")
       }
 
       newPWD = new_password

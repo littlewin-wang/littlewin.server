@@ -6,6 +6,7 @@
 const ArticleModel = require('models/article.model')
 const CommentModel = require('models/comment.model')
 const SiteModel = require('models/site.model')
+const EventModel = require('models/event.model')
 
 class Like {
   static async like (ctx) {
@@ -13,7 +14,7 @@ class Like {
 
     // type { 1: 评论, 2: 页面 }
     if (![1, 2].includes(type)) {
-      ctx.throw(401, 'type参数不对，请按照{ 1: 评论, 2: 页面 }设置')
+      ctx.throw(400, 'type参数不对，请按照{ 1: 评论, 2: 页面 }设置')
     }
 
     // 根据type和id找出对象
@@ -34,6 +35,16 @@ class Like {
         result: ret
       }
     }
+
+    // event system push
+    new EventModel({
+      person: '某人',
+      action: 'LIKE',
+      target: {
+        type: (Object.is(type, 1) ? 'COMMENT' : Object.is(id, 0) ? 'SITE' : 'ARTICLE'),
+        data: ret
+      }
+    }).save()
   }
 }
 

@@ -6,6 +6,7 @@
 const CommentModel = require('models/comment.model')
 const ArticleModel = require('models/article.model')
 const SiteModel = require('models/site.model')
+const EventModel = require('models/event.model')
 
 const { akismetClient } = require('utils/akismet');
 const { sendMail } = require('utils/email')
@@ -143,13 +144,23 @@ class Comment {
       success: true,
       message: "评论批量更新成功"
     }
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'MODIFYLIST',
+      target: {
+        type: 'COMMENT',
+        data: comments
+      }
+    }).save()
   }
 
   static async deleteList (ctx) {
     const { comments } = ctx.request.body
 
     if (!comments || !comments.length) {
-      ctx.throw(401, '缺少有效参数')
+      ctx.throw(400, '缺少有效参数')
       return
     }
 
@@ -184,6 +195,16 @@ class Comment {
       success: true,
       message: "批量删除评论成功",
     }
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'DELETELIST',
+      target: {
+        type: 'COMMENT',
+        data: comments
+      }
+    }).save()
   }
 
   static async create (ctx) {
@@ -226,7 +247,7 @@ class Comment {
     })
 
     if (akismetCheck) {
-      ctx.status = 401
+      ctx.status = 400
       ctx.body = {
         success: false,
         message: "评论未通过akismet验证"
@@ -238,7 +259,7 @@ class Comment {
     let site = await SiteModel.findOne()
     const { keywords, mails, ips } = site.blacklist
     if (ips.includes(comment.ip) || mails.includes(comment.author.email) || (keywords.length && eval(`/${keywords.join('|')}/ig`).test(comment.content))) {
-      ctx.status = 401
+      ctx.status = 400
       ctx.body = {
         success: false,
         message: "IP或Email被ban || 评论内容不当"
@@ -269,6 +290,16 @@ class Comment {
         result
       }
     }
+
+    // event system push
+    new EventModel({
+      person: comment.author.name || '某人',
+      action: 'NEW',
+      target: {
+        type: 'COMMENT',
+        data: result
+      }
+    }).save()
   }
 
   static async get (ctx) {
@@ -278,7 +309,7 @@ class Comment {
 
     // 是否查找到
     if (!result) {
-      ctx.throw(401, "评论获取失败")
+      ctx.throw(404, "评论ID不存在")
       return
     }
 
@@ -332,6 +363,16 @@ class Comment {
       message: "评论修改成功",
       result
     }
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'MODIFY',
+      target: {
+        type: 'COMMENT',
+        data: result
+      }
+    }).save()
   }
 
   static async delete (ctx) {
@@ -341,7 +382,7 @@ class Comment {
       .findOne({ _id: id })
 
     if (!isExist) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = {
         success: false,
         message: "评论ID不存在"
@@ -371,6 +412,16 @@ class Comment {
       success: true,
       message: "评论删除成功",
     }
+
+    // event system push
+    new EventModel({
+      person: 'ADMIN',
+      action: 'DELETE',
+      target: {
+        type: 'COMMENT',
+        data: isExist
+      }
+    }).save()
   }
 }
 

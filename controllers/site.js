@@ -4,6 +4,7 @@
  */
 
 const SiteModel = require('models/site.model')
+const EventModel = require('models/event.model')
 
 const config = require('config/env')[process.env.NODE_ENV||'development']
 
@@ -46,7 +47,7 @@ class Site {
       siteInfo.blacklist.mails = (siteInfo.blacklist.mails || []).filter(t => !!t)
       siteInfo.blacklist.keywords = (siteInfo.blacklist.keywords || []).filter(t => !!t)
     }
-    
+
     let result = !!_id ? await SiteModel.findByIdAndUpdate(_id, siteInfo, { new: true }) : await new SiteModel(siteInfo).save()
 
     ctx.status = 200,
@@ -57,6 +58,16 @@ class Site {
         site: result
       }
     }
+
+    // event system push
+    new EventModel({
+      person: 'Admin',
+      action: !!_id ? 'MODIFY' : 'NEW',
+      target: {
+        type: 'SITE',
+        data: result
+      }
+    }).save()
   }
 }
 

@@ -16,13 +16,13 @@ const EventSchema = new Schema({
   person: { type: String, required: true, validate: /\S+/ },
 
   // 事件动作
-  action: { type: String, required: true, validate: /\b(NEW|MODIFY|DELETE|LIKE)\b/ },
+  action: { type: String, required: true, validate: /\b(NEW|MODIFY|MODIFYLIST|DELETE|DELETELIST|LIKE)\b/ },
 
-  // 事件目标类型
-  targetType: { type: String, required: true, validate: /\b(ARTICLE|CATEGORY|TAG|COMMENT|SITE)\b/ },
+  // 事件目标
+  target: { type: Object, required: true },
 
-  // 事件目标ID
-  targetID: { type: mongoose.Schema.Types.ObjectId, required: true },
+  // 描述
+  description: String,
 
   // 创建时间
   createAt: { type: Date, default: Date.now },
