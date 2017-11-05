@@ -11,7 +11,7 @@ class Event {
 
     // 过滤条件
     const options = {
-      sort: { createAt: 1 },
+      sort: { createAt: -1 },
       page: Number(page),
       limit: Number(per_page)
     }
