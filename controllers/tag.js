@@ -44,7 +44,7 @@ class Tag {
           action: 'NEW',
           target: {
             type: 'TAG',
-            data: tag
+            change: tag.name
           }
         }).save()
         // generate sitemap
@@ -147,7 +147,7 @@ class Tag {
       action: 'DELETELIST',
       target: {
         type: 'TAG',
-        data: tags
+        change: tags.length
       }
     }).save()
   }

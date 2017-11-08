@@ -48,7 +48,7 @@ class User {
       },
       config.AUTH.jwtTokenSecret,
       {
-        expiresIn: '1h'
+        expiresIn: '4h'
       }
     )
 
