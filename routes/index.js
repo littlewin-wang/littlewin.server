@@ -18,6 +18,7 @@ const Server = require('controllers/server')
 const SiteMap = require('controllers/sitemap')
 const Like = require('controllers/like')
 const Event = require('controllers/event')
+const Message = require('controllers/message')
 const middleware = require('middlewares')
 
 router
@@ -81,5 +82,11 @@ router
   .get('/event/:id', Event.get)
   .delete('/event', middleware.verifyToken, Event.deleteList)
   .delete('/event/:id', middleware.verifyToken, Event.delete)
+
+  .get('/message', Message.list)
+  .post('/message', middleware.verifyToken, Message.create)
+  .put('/message/:id', middleware.verifyToken, Message.modify)
+  .delete('/message/:id', middleware.verifyToken, Message.delete)
+  .delete('/message', middleware.verifyToken, Message.deleteList)
 
 module.exports = router
