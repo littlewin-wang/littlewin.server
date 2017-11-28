@@ -227,6 +227,7 @@ $ pm2 start ecosystem.config.js
  - [x] 启用redis
  - [x] 启用SSL
  - [x] 增加事件系统
+ - [x] 增加公告系统
 
 ## Contact
 Email: [littlewin.wang@gmail.com](mailto:littlewin.wang@gmail.com)
