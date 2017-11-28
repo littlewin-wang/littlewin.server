@@ -13,7 +13,7 @@
  */
 
 // TODO 密钥信息存放在加密数据库
-let { AUTH, QINIU, QCLOUD, EMAIL, AKISMET, BAIDU } = require(process.env.HOME.concat('/key/littlewin-server'))
+let { AUTH, QINIU, QCLOUD, EMAIL, AKISMET, BAIDU, SPOTIFY } = require(process.env.HOME.concat('/key/littlewin-server'))
 
 const APP = {
   ROOT_PATH: __dirname,
@@ -52,6 +52,7 @@ module.exports = {
     EMAIL,
     AKISMET,
     BAIDU,
+    SPOTIFY,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-dev'
     },
@@ -70,6 +71,7 @@ module.exports = {
     EMAIL,
     AKISMET,
     BAIDU,
+    SPOTIFY,
     mongo: {
       uri: 'mongodb://localhost:27017/littlewin-prd'
     },

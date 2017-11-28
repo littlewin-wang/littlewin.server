@@ -19,6 +19,7 @@ const SiteMap = require('controllers/sitemap')
 const Like = require('controllers/like')
 const Event = require('controllers/event')
 const Message = require('controllers/message')
+const Spotify = require('controllers/spotify')
 const middleware = require('middlewares')
 
 router
@@ -88,5 +89,7 @@ router
   .put('/message/:id', middleware.verifyToken, Message.modify)
   .delete('/message/:id', middleware.verifyToken, Message.delete)
   .delete('/message', middleware.verifyToken, Message.deleteList)
+
+  .get('/spotify', Spotify.getToken)
 
 module.exports = router
