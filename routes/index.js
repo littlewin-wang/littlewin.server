@@ -20,6 +20,7 @@ const Like = require('controllers/like')
 const Event = require('controllers/event')
 const Message = require('controllers/message')
 const Spotify = require('controllers/spotify')
+const GA = require('controllers/ga')
 const middleware = require('middlewares')
 
 router
@@ -91,5 +92,7 @@ router
   .delete('/message', middleware.verifyToken, Message.deleteList)
 
   .get('/spotify', Spotify.getToken)
+
+  .post('/ga', GA.post)
 
 module.exports = router

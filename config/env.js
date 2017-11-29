@@ -24,7 +24,8 @@ const INFO = {
   title: 'littlewin.server',
   version: '1.0.0',
   author: 'littlewin',
-  site: 'http://littlewin.wang',
+  site: 'https://littlewin.wang',
+  GA: 'UA-108992108-1',
   with: ['Node.js', 'MongoDB', 'Koa2', 'Nginx']
 }
 
