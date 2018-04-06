@@ -21,6 +21,7 @@ const Event = require('controllers/event')
 const Message = require('controllers/message')
 const Spotify = require('controllers/spotify')
 const GA = require('controllers/ga')
+const Music = require('controllers/music')
 const middleware = require('middlewares')
 
 router
@@ -94,5 +95,11 @@ router
   .get('/spotify', Spotify.getToken)
 
   .post('/ga', GA.post)
+
+  .get('/music/list/:id', Music.getPlaylist)
+  .get('/music/:id', Music.getMucic)
+  .get('/music/url/:id', Music.getUrl)
+  .get('/music/lrc/:id', Music.getLrc)
+  .get('/music/pic/:id', Music.getPic)
 
 module.exports = router
