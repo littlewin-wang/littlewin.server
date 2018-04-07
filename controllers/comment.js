@@ -88,12 +88,24 @@ class Comment {
     }
 
     const comments = await CommentModel.paginate(querys, options)
+
+    // 拷贝数组对象来修改docs
+    let ret = JSON.parse(JSON.stringify(comments.docs))
+
+    for (let c of ret) {
+      let article = await ArticleModel.findOne({ id: c.postID })
+
+      if (article && article.title) {
+        c.postTitle = article.title
+      }
+    }
+
     ctx.status = 200
     ctx.body = {
       success: true,
       message: "评论列表获取成功",
       data: {
-        comments: comments.docs,
+        comments: ret,
         total: comments.total,
         limit: comments.limit,
         page: comments.page,
