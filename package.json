@@ -1,8 +1,19 @@
 {
   "name": "littlewin.server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A restful blog backend server built for littlewin.wang.",
+  "author": {
+    "name": "Littlewin",
+    "email": "littlewin.wang@gmail.com",
+    "url": "https://littlewin.wang"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/littlewin-wang/littlewin.server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/littlewin-wang/littlewin.server/issues"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -17,22 +28,27 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "patch": "npm version patch && git push origin master && git push origin --tags",
+    "minor": "npm version minor && git push origin master && git push origin --tags",
+    "major": "npm version major && git push origin master && git push origin --tags"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
-    "@nestjs/platform-express": "^6.0.0", 
+    "@nestjs/platform-express": "^6.0.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
+    "@nestjs/testing": "^6.0.0",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
     "@types/supertest": "^2.0.7",
-    "@nestjs/testing": "^6.0.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
@@ -44,7 +60,11 @@
     "typescript": "^3.2.4"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".spec.ts$",
     "transform": {

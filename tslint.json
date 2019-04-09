@@ -5,6 +5,10 @@
     "no-unused-expression": true
   },
   "rules": {
+    "no-var-requires": false,
+    "no-console": [
+      false
+    ],
     "quotemark": [true, "single"],
     "member-access": [false],
     "ordered-imports": [false],
