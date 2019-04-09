@@ -52,7 +52,7 @@ export const QCLOUD = {
 };
 
 export const MONGODB = {
-  uri: `mongodb://127.0.0.1:${argv.dbport || '27017'}/littlewin.server`,
+  uri: `mongodb://127.0.0.1:${argv.dbport || '27017'}/littlewin-dev`,
   username: argv.db_username || 'DB_admin',
   password: argv.db_password || 'DB_r00tme',
 };
